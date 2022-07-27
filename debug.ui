@@ -56,7 +56,7 @@
 #helptext{
 	color:rgb(30,30,30);
 }
-#cmdtext,#helptext{
+#console,#helptext{
 	border-radius:6px;
 	background-color:#1e1e1e;
 }
@@ -468,7 +468,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                 </size>
                </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:700;&quot;&gt;Yardım&lt;/span&gt;&lt;/h4&gt;&lt;h5 style=&quot; margin-top:12px; margin-bottom:4px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:small; font-weight:700;&quot;&gt;Hata Ayıklama Kısayolları:&lt;/span&gt;&lt;/h5&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;1.Tuş&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt; Mevcut seviyede kalarak bir sonraki satıra geçin. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;2.Tuş&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt; Bir sonraki satıra geçin ve varsa bir işleve geçin. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;3.Tuş&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt; geçerli işlevden çıkın. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;4.Tuş&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt;&lt;span style=&quot; font-weight:700;&quot;/&gt;yürütmeye devam edin. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;Gönder Tuşu&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt; Bir PDB komutu gönderin (komut alanından). &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;Çalıştırılan dosya&lt;/span&gt; kutusundaki bir satır numarasını tıklayın: bir kesme noktası ayarlayın veya kaldırın. &lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:700;&quot;&gt;Yardım&lt;/span&gt;&lt;/h4&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;Step&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt; Mevcut seviyede kalarak bir sonraki satıra geçin. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;Next&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt; Bir sonraki satıra geçin ve varsa bir işleve geçin. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;Return&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;:&lt;/span&gt; Geçerli işlevden çıkın. &lt;/li&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Courier New'; font-weight:700; color:#ff0000;&quot;&gt;Continue&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#ff0000;&quot;&gt;: &lt;/span&gt;Yürütmeye devam edin. &lt;/li&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;Kesme Noktası&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#0000ff;&quot;&gt;eklemek&lt;/span&gt; için konsol kutusuna b yazıp eklemek istediğiniz satırın numarasını yazın.(örn: b 8 )-&amp;gt;&amp;gt;(8.satıra kesme noktası ekler).&lt;/li&gt;&lt;/ul&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;Kesme Noktası&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#0000ff;&quot;&gt;kaldırmak&lt;/span&gt; için konsol kutusuna cl yazıp kaldırmak istediğiniz kesme noktası kaçıncı sıradaysa onu yazınız.(örn: cl 3)-&amp;gt;&amp;gt;(üçüncü eklenen kesme noktasını kaldırır).&lt;/li&gt;&lt;/ul&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;Kesme Noktası&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#0000ff;&quot;&gt;eklemek&lt;/span&gt; için Çalıştırılan dosya kutusundaki satır numaralarının sağına tıklayınız.&lt;/li&gt;&lt;/ul&gt;&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;Kesme Noktası&lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#0000ff;&quot;&gt;kaldırmak&lt;/span&gt; için Çalıştırılan dosya kutusundaki daha önce eklenmiş Kesme noktasına tıklayarak kaldırabilirsiniz.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -670,23 +670,11 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                 <enum>QFrame::Raised</enum>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_12">
-                <property name="spacing">
-                 <number>4</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
                 <item>
                  <widget class="QFrame" name="codeframe">
+                  <property name="styleSheet">
+                   <string notr="true">QTabWidget::pane {background: #1e1e1e;border-color: #1e1e1e;border-style: solid;border-width: 0px 0px 0px 0px;border-radius:6px;color: #1e1e1e;}QTabBar::tab{height: 10px;width: 0px;border-radius:6px;}QTabWidget::tab-bar:top {top: 0px;border-radius:6px;}QTabWidget::tab-bar:bottom {bottom: 0px;border-radius:6px;}QTabWidget::tab-bar:left {right: 0px;border-radius:6px;}QTabWidget::tab-bar:right {left: 0px;border-radius:6px;}QTabBar::tab:selected {color: #1e1e1e;border-color: #1e1e1e;border-style: solid;border-radius:6px;border-width: 0px 0px 0px 0px;color: #1e1e1e;background: #1e1e1e;}QTabBar::tab:!selected {background: transparent;color: #1e1e1e;border-radius:6px;}QTabBar::tab:!selected:hover {background: #1e1e1e;color: black;border-radius:6px;}QTabBar::tab:top:last, QTabBar::tab:bottom:last,QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {margin-right: 0;border-radius:6px;}QTabBar::tab:left:last, QTabBar::tab:right:last,QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {margin-bottom: 0;border-radius:6px;}</string>
+                  </property>
                   <property name="frameShape">
                    <enum>QFrame::StyledPanel</enum>
                   </property>
@@ -694,127 +682,10 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                    <enum>QFrame::Raised</enum>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_8">
-                   <property name="spacing">
-                    <number>0</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>4</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>4</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>4</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>4</number>
-                   </property>
-                   <item alignment="Qt::AlignTop">
-                    <widget class="QScrollArea" name="scrollArea">
-                     <property name="maximumSize">
-                      <size>
-                       <width>60</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QCheckBox{
-		font: 12pt;
-		font-family:'Consolas';
-		spacing:6px;
-		height:18px;
-		max-height:18px;
-		min-height:18px;
-}
-QCheckBox::indicator {
-    width: 10px;
-    height: 10px;
-}
-
-QCheckBox::indicator:unchecked {
-  	background:transparent;
-}
-QCheckBox::indicator:unchecked:hover {
-    image: url(:/icons/icons/checkbox1.svg);
-}
-
-QCheckBox::indicator:checked {
-   image: url(:/icons/icons/checkbox2.svg);
-}
-</string>
-                     </property>
-                     <property name="verticalScrollBarPolicy">
-                      <enum>Qt::ScrollBarAlwaysOff</enum>
-                     </property>
-                     <property name="horizontalScrollBarPolicy">
-                      <enum>Qt::ScrollBarAlwaysOff</enum>
-                     </property>
-                     <property name="widgetResizable">
-                      <bool>true</bool>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignHCenter|Qt::AlignTop</set>
-                     </property>
-                     <widget class="QWidget" name="breakpoints">
-                      <property name="geometry">
-                       <rect>
-                        <x>0</x>
-                        <y>0</y>
-                        <width>60</width>
-                        <height>80</height>
-                       </rect>
-                      </property>
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="font">
-                       <font>
-                        <pointsize>14</pointsize>
-                        <bold>false</bold>
-                       </font>
-                      </property>
-                      <layout class="QVBoxLayout" name="verticalLayout_4">
-                       <property name="spacing">
-                        <number>0</number>
-                       </property>
-                       <property name="leftMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="topMargin">
-                        <number>4</number>
-                       </property>
-                       <property name="rightMargin">
-                        <number>0</number>
-                       </property>
-                       <property name="bottomMargin">
-                        <number>0</number>
-                       </property>
-                      </layout>
-                     </widget>
-                    </widget>
-                   </item>
                    <item>
-                    <widget class="QTextEdit" name="codestext">
-                     <property name="font">
-                      <font>
-                       <family>Courier</family>
-                       <pointsize>12</pointsize>
-                      </font>
-                     </property>
-                     <property name="verticalScrollBarPolicy">
-                      <enum>Qt::ScrollBarAsNeeded</enum>
-                     </property>
-                     <property name="horizontalScrollBarPolicy">
-                      <enum>Qt::ScrollBarAsNeeded</enum>
-                     </property>
-                     <property name="lineWrapMode">
-                      <enum>QTextEdit::NoWrap</enum>
-                     </property>
-                     <property name="textInteractionFlags">
-                      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+                    <widget class="QTabWidget" name="tabWidget">
+                     <property name="currentIndex">
+                      <number>-1</number>
                      </property>
                     </widget>
                    </item>
@@ -870,14 +741,15 @@ QCheckBox::indicator:checked {
                 <string notr="true">QPushButton{
 	border:1 px solid #0d6efd;
 	background-color:#0d6efd;
-	color:rgb(30,30,30)
+	color:rgb(255,255,255);
+	font: 700 12pt &quot;Segoe UI&quot;;
 }
 QPushButton:hover{
 	background-color:#0b5ed7;
 }
-#_1step{border-top-left-radius:6px;
+#button_step{border-top-left-radius:6px;
 border-bottom-left-radius:6px;}
-#_5help{border-top-right-radius:6px;
+#button_help{border-top-right-radius:6px;
 border-bottom-right-radius:6px;}</string>
                </property>
                <property name="frameShape">
@@ -903,135 +775,111 @@ border-bottom-right-radius:6px;}</string>
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="_1step">
+                 <widget class="QPushButton" name="button_step">
                   <property name="minimumSize">
                    <size>
-                    <width>35</width>
+                    <width>70</width>
                     <height>35</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>35</width>
+                    <width>70</width>
                     <height>35</height>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mevcut seviyede kalarak bir sonraki satıra geçin. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0d6efd;&quot;&gt;Mevcut seviyede kalarak bir sonraki satıra geçin. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="icons.qrc">
-                    <normaloff>:/icons/icons/step.svg</normaloff>:/icons/icons/step.svg</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>35</width>
-                    <height>35</height>
-                   </size>
+                   <string>Step</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="_2intofunc">
+                 <widget class="QPushButton" name="button_next">
                   <property name="minimumSize">
                    <size>
-                    <width>55</width>
+                    <width>70</width>
                     <height>35</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>55</width>
+                    <width>70</width>
                     <height>35</height>
                    </size>
                   </property>
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                   </font>
+                  </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bir sonraki satıra geçin ve varsa bir işleve geçin. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0d6efd;&quot;&gt;Bir sonraki satıra geçin ve varsa bir işleve geçin.  &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="icons.qrc">
-                    <normaloff>:/icons/icons/intofunc.svg</normaloff>:/icons/icons/intofunc.svg</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
+                   <string>Next</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="_3fromfunc">
+                 <widget class="QPushButton" name="button_return">
                   <property name="minimumSize">
                    <size>
-                    <width>55</width>
+                    <width>70</width>
                     <height>35</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>55</width>
+                    <width>70</width>
                     <height>35</height>
                    </size>
                   </property>
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>12</pointsize>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                   </font>
+                  </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Geçerli işlevden çıkın. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0d6efd;&quot;&gt;Geçerli işlevden çıkın.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="icons.qrc">
-                    <normaloff>:/icons/icons/fromfunc.svg</normaloff>:/icons/icons/fromfunc.svg</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
+                   <string>Return</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="_4execution">
+                 <widget class="QPushButton" name="button_continue">
                   <property name="minimumSize">
                    <size>
-                    <width>35</width>
+                    <width>80</width>
                     <height>35</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>35</width>
+                    <width>80</width>
                     <height>35</height>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Yürütmeye devam edin. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0d6efd;&quot;&gt;Yürütmeye devam edin.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
-                   <string/>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="icons.qrc">
-                    <normaloff>:/icons/icons/play.svg</normaloff>:/icons/icons/play.svg</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>35</width>
-                    <height>35</height>
-                   </size>
+                   <string>Continue</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="_5help">
+                 <widget class="QPushButton" name="button_help">
                   <property name="minimumSize">
                    <size>
                     <width>35</width>
@@ -1045,7 +893,7 @@ border-bottom-right-radius:6px;}</string>
                    </size>
                   </property>
                   <property name="toolTip">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Yardım Menüsü.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#0d6efd;&quot;&gt;Yardım Menüsü.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -1083,156 +931,6 @@ border-bottom-right-radius:6px;}</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QTextEdit" name="cmdtext">
-                  <property name="verticalScrollBarPolicy">
-                   <enum>Qt::ScrollBarAsNeeded</enum>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QFrame" name="commands">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton{
-	border-top-right-radius:6px;
-	border-bottom-right-radius:6px;
-	border:1 px solid #0d6efd;
-	background-color:#0d6efd;
-}
-QPushButton:hover{
-	background-color:#0b5ed7;
-}
-QLabel{
-	border-top-left-radius:6px;
-	border-bottom-left-radius:6px;
-	border:1px solid #ced4da;
-	background-color:#e9ecef;
-	color:#212529;
-}
-QLineEdit{
-	border:1px solid #ced4da;
-	background-color:#e9ecef;
-	color:#212529;
-padding-left:2px;
-}</string>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_9">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_2">
-                  <property name="minimumSize">
-                   <size>
-                    <width>70</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>Segoe UI</family>
-                    <pointsize>13</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Komut</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="comline">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>14</pointsize>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="inputMask">
-                   <string/>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="cursorPosition">
-                   <number>0</number>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Komutunuzu buraya girebilirsiniz.</string>
-                  </property>
-                  <property name="clearButtonEnabled">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="sendButton">
-                  <property name="minimumSize">
-                   <size>
-                    <width>70</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>Segoe UI</family>
-                    <pointsize>13</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Gönder</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
@@ -1253,7 +951,7 @@ padding-left:2px;
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>10</height>
+           <height>20</height>
           </size>
          </property>
          <property name="frameShape">
@@ -1289,7 +987,7 @@ padding-left:2px;
             <property name="minimumSize">
              <size>
               <width>786</width>
-              <height>0</height>
+              <height>15</height>
              </size>
             </property>
             <property name="frameShape">
