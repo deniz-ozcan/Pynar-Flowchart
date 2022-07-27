@@ -39,7 +39,7 @@ class Ui_Debug(object):
 "#helptext{\n"
 "    color:rgb(30,30,30);\n"
 "}\n"
-"#cmdtext,#helptext{\n"
+"#console,#helptext{\n"
 "    border-radius:6px;\n"
 "    background-color:#1e1e1e;\n"
 "}\n"
@@ -330,77 +330,17 @@ class Ui_Debug(object):
         self.general.setFrameShadow(QtWidgets.QFrame.Raised)
         self.general.setObjectName("general")
         self.horizontalLayout_12 = QtWidgets.QHBoxLayout(self.general)
-        self.horizontalLayout_12.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_12.setSpacing(4)
         self.horizontalLayout_12.setObjectName("horizontalLayout_12")
         self.codeframe = QtWidgets.QFrame(self.general)
+        self.codeframe.setStyleSheet("QTabWidget::pane {background: #1e1e1e;border-color: #1e1e1e;border-style: solid;border-width: 0px 0px 0px 0px;border-radius:6px;color: #1e1e1e;}QTabBar::tab{height: 10px;width: 0px;border-radius:6px;}QTabWidget::tab-bar:top {top: 0px;border-radius:6px;}QTabWidget::tab-bar:bottom {bottom: 0px;border-radius:6px;}QTabWidget::tab-bar:left {right: 0px;border-radius:6px;}QTabWidget::tab-bar:right {left: 0px;border-radius:6px;}QTabBar::tab:selected {color: #1e1e1e;border-color: #1e1e1e;border-style: solid;border-radius:6px;border-width: 0px 0px 0px 0px;color: #1e1e1e;background: #1e1e1e;}QTabBar::tab:!selected {background: transparent;color: #1e1e1e;border-radius:6px;}QTabBar::tab:!selected:hover {background: #1e1e1e;color: black;border-radius:6px;}QTabBar::tab:top:last, QTabBar::tab:bottom:last,QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {margin-right: 0;border-radius:6px;}QTabBar::tab:left:last, QTabBar::tab:right:last,QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {margin-bottom: 0;border-radius:6px;}")
         self.codeframe.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.codeframe.setFrameShadow(QtWidgets.QFrame.Raised)
         self.codeframe.setObjectName("codeframe")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.codeframe)
-        self.horizontalLayout_8.setContentsMargins(4, 4, 4, 4)
-        self.horizontalLayout_8.setSpacing(0)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.scrollArea = QtWidgets.QScrollArea(self.codeframe)
-        self.scrollArea.setMaximumSize(QtCore.QSize(60, 16777215))
-        self.scrollArea.setStyleSheet("QCheckBox{\n"
-"        font: 12pt;\n"
-"        font-family:\'Consolas\';\n"
-"        spacing:6px;\n"
-"        height:18px;\n"
-"        max-height:18px;\n"
-"        min-height:18px;\n"
-"}\n"
-"QCheckBox::indicator {\n"
-"    width: 10px;\n"
-"    height: 10px;\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:unchecked {\n"
-"      background:transparent;\n"
-"}\n"
-"QCheckBox::indicator:unchecked:hover {\n"
-"    image: url(:/icons/icons/checkbox1.svg);\n"
-"}\n"
-"\n"
-"QCheckBox::indicator:checked {\n"
-"   image: url(:/icons/icons/checkbox2.svg);\n"
-"}\n"
-"")
-        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
-        self.scrollArea.setObjectName("scrollArea")
-        self.breakpoints = QtWidgets.QWidget()
-        self.breakpoints.setGeometry(QtCore.QRect(0, 0, 60, 80))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.breakpoints.sizePolicy().hasHeightForWidth())
-        self.breakpoints.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(False)
-        self.breakpoints.setFont(font)
-        self.breakpoints.setObjectName("breakpoints")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.breakpoints)
-        self.verticalLayout_4.setContentsMargins(0, 4, 0, 0)
-        self.verticalLayout_4.setSpacing(0)
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.scrollArea.setWidget(self.breakpoints)
-        self.horizontalLayout_8.addWidget(self.scrollArea, 0, QtCore.Qt.AlignTop)
-        self.codestext = QtWidgets.QTextEdit(self.codeframe)
-        font = QtGui.QFont()
-        font.setFamily("Courier")
-        font.setPointSize(12)
-        self.codestext.setFont(font)
-        self.codestext.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.codestext.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.codestext.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
-        self.codestext.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
-        self.codestext.setObjectName("codestext")
-        self.horizontalLayout_8.addWidget(self.codestext)
+        self.tabWidget = QtWidgets.QTabWidget(self.codeframe)
+        self.tabWidget.setObjectName("tabWidget")
+        self.horizontalLayout_8.addWidget(self.tabWidget)
         self.horizontalLayout_12.addWidget(self.codeframe)
         self.varframe = QtWidgets.QFrame(self.general)
         self.varframe.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -421,14 +361,15 @@ class Ui_Debug(object):
         self.button_group.setStyleSheet("QPushButton{\n"
 "    border:1 px solid #0d6efd;\n"
 "    background-color:#0d6efd;\n"
-"    color:rgb(30,30,30)\n"
+"    color:rgb(255,255,255);\n"
+"    font: 700 12pt \"Segoe UI\";\n"
 "}\n"
 "QPushButton:hover{\n"
 "    background-color:#0b5ed7;\n"
 "}\n"
-"#_1step{border-top-left-radius:6px;\n"
+"#button_step{border-top-left-radius:6px;\n"
 "border-bottom-left-radius:6px;}\n"
-"#_5help{border-top-right-radius:6px;\n"
+"#button_help{border-top-right-radius:6px;\n"
 "border-bottom-right-radius:6px;}")
         self.button_group.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.button_group.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -437,56 +378,48 @@ class Ui_Debug(object):
         self.horizontalLayout_10.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_10.setSpacing(0)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        self._1step = QtWidgets.QPushButton(self.button_group)
-        self._1step.setMinimumSize(QtCore.QSize(35, 35))
-        self._1step.setMaximumSize(QtCore.QSize(35, 35))
-        self._1step.setText("")
+        self.button_step = QtWidgets.QPushButton(self.button_group)
+        self.button_step.setMinimumSize(QtCore.QSize(70, 35))
+        self.button_step.setMaximumSize(QtCore.QSize(70, 35))
+        self.button_step.setObjectName("button_step")
+        self.horizontalLayout_10.addWidget(self.button_step)
+        self.button_next = QtWidgets.QPushButton(self.button_group)
+        self.button_next.setMinimumSize(QtCore.QSize(70, 35))
+        self.button_next.setMaximumSize(QtCore.QSize(70, 35))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        self.button_next.setFont(font)
+        self.button_next.setObjectName("button_next")
+        self.horizontalLayout_10.addWidget(self.button_next)
+        self.button_return = QtWidgets.QPushButton(self.button_group)
+        self.button_return.setMinimumSize(QtCore.QSize(70, 35))
+        self.button_return.setMaximumSize(QtCore.QSize(70, 35))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        self.button_return.setFont(font)
+        self.button_return.setObjectName("button_return")
+        self.horizontalLayout_10.addWidget(self.button_return)
+        self.button_continue = QtWidgets.QPushButton(self.button_group)
+        self.button_continue.setMinimumSize(QtCore.QSize(80, 35))
+        self.button_continue.setMaximumSize(QtCore.QSize(80, 35))
+        self.button_continue.setObjectName("button_continue")
+        self.horizontalLayout_10.addWidget(self.button_continue)
+        self.button_help = QtWidgets.QPushButton(self.button_group)
+        self.button_help.setMinimumSize(QtCore.QSize(35, 35))
+        self.button_help.setMaximumSize(QtCore.QSize(35, 35))
+        self.button_help.setText("")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/icons/icons/step.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self._1step.setIcon(icon5)
-        self._1step.setIconSize(QtCore.QSize(35, 35))
-        self._1step.setObjectName("_1step")
-        self.horizontalLayout_10.addWidget(self._1step)
-        self._2intofunc = QtWidgets.QPushButton(self.button_group)
-        self._2intofunc.setMinimumSize(QtCore.QSize(55, 35))
-        self._2intofunc.setMaximumSize(QtCore.QSize(55, 35))
-        self._2intofunc.setText("")
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/icons/icons/intofunc.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self._2intofunc.setIcon(icon6)
-        self._2intofunc.setIconSize(QtCore.QSize(45, 45))
-        self._2intofunc.setObjectName("_2intofunc")
-        self.horizontalLayout_10.addWidget(self._2intofunc)
-        self._3fromfunc = QtWidgets.QPushButton(self.button_group)
-        self._3fromfunc.setMinimumSize(QtCore.QSize(55, 35))
-        self._3fromfunc.setMaximumSize(QtCore.QSize(55, 35))
-        self._3fromfunc.setText("")
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/icons/icons/fromfunc.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self._3fromfunc.setIcon(icon7)
-        self._3fromfunc.setIconSize(QtCore.QSize(45, 45))
-        self._3fromfunc.setObjectName("_3fromfunc")
-        self.horizontalLayout_10.addWidget(self._3fromfunc)
-        self._4execution = QtWidgets.QPushButton(self.button_group)
-        self._4execution.setMinimumSize(QtCore.QSize(35, 35))
-        self._4execution.setMaximumSize(QtCore.QSize(35, 35))
-        self._4execution.setText("")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/icons/icons/play.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self._4execution.setIcon(icon8)
-        self._4execution.setIconSize(QtCore.QSize(35, 35))
-        self._4execution.setObjectName("_4execution")
-        self.horizontalLayout_10.addWidget(self._4execution)
-        self._5help = QtWidgets.QPushButton(self.button_group)
-        self._5help.setMinimumSize(QtCore.QSize(35, 35))
-        self._5help.setMaximumSize(QtCore.QSize(35, 35))
-        self._5help.setText("")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap(":/icons/icons/help.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self._5help.setIcon(icon9)
-        self._5help.setIconSize(QtCore.QSize(35, 35))
-        self._5help.setObjectName("_5help")
-        self.horizontalLayout_10.addWidget(self._5help)
+        icon5.addPixmap(QtGui.QPixmap(":/icons/icons/help.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.button_help.setIcon(icon5)
+        self.button_help.setIconSize(QtCore.QSize(35, 35))
+        self.button_help.setObjectName("button_help")
+        self.horizontalLayout_10.addWidget(self.button_help)
         self.verticalLayout_2.addWidget(self.button_group, 0, QtCore.Qt.AlignHCenter)
         self.cmdframe = QtWidgets.QFrame(self.frame_5)
         self.cmdframe.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -496,76 +429,7 @@ class Ui_Debug(object):
         self.horizontalLayout_14.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_14.setSpacing(0)
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
-        self.cmdtext = QtWidgets.QTextEdit(self.cmdframe)
-        self.cmdtext.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.cmdtext.setObjectName("cmdtext")
-        self.horizontalLayout_14.addWidget(self.cmdtext)
         self.verticalLayout_2.addWidget(self.cmdframe)
-        self.commands = QtWidgets.QFrame(self.frame_5)
-        self.commands.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.commands.setStyleSheet("QPushButton{\n"
-"    border-top-right-radius:6px;\n"
-"    border-bottom-right-radius:6px;\n"
-"    border:1 px solid #0d6efd;\n"
-"    background-color:#0d6efd;\n"
-"}\n"
-"QPushButton:hover{\n"
-"    background-color:#0b5ed7;\n"
-"}\n"
-"QLabel{\n"
-"    border-top-left-radius:6px;\n"
-"    border-bottom-left-radius:6px;\n"
-"    border:1px solid #ced4da;\n"
-"    background-color:#e9ecef;\n"
-"    color:#212529;\n"
-"}\n"
-"QLineEdit{\n"
-"    border:1px solid #ced4da;\n"
-"    background-color:#e9ecef;\n"
-"    color:#212529;\n"
-"padding-left:2px;\n"
-"}")
-        self.commands.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.commands.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.commands.setObjectName("commands")
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.commands)
-        self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_9.setSpacing(0)
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.label_2 = QtWidgets.QLabel(self.commands)
-        self.label_2.setMinimumSize(QtCore.QSize(70, 35))
-        self.label_2.setMaximumSize(QtCore.QSize(70, 35))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(13)
-        font.setBold(True)
-        self.label_2.setFont(font)
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_9.addWidget(self.label_2)
-        self.comline = QtWidgets.QLineEdit(self.commands)
-        self.comline.setMinimumSize(QtCore.QSize(0, 35))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        font.setBold(False)
-        self.comline.setFont(font)
-        self.comline.setInputMask("")
-        self.comline.setText("")
-        self.comline.setCursorPosition(0)
-        self.comline.setClearButtonEnabled(False)
-        self.comline.setObjectName("comline")
-        self.horizontalLayout_9.addWidget(self.comline)
-        self.sendButton = QtWidgets.QPushButton(self.commands)
-        self.sendButton.setMinimumSize(QtCore.QSize(70, 35))
-        self.sendButton.setMaximumSize(QtCore.QSize(70, 35))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(13)
-        font.setBold(True)
-        self.sendButton.setFont(font)
-        self.sendButton.setObjectName("sendButton")
-        self.horizontalLayout_9.addWidget(self.sendButton)
-        self.verticalLayout_2.addWidget(self.commands)
         self.horizontalLayout_11.addWidget(self.frame_5)
         self.verticalLayout.addWidget(self.main)
         self.footer = QtWidgets.QFrame(self.mainMenu)
@@ -574,7 +438,7 @@ class Ui_Debug(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.footer.sizePolicy().hasHeightForWidth())
         self.footer.setSizePolicy(sizePolicy)
-        self.footer.setMinimumSize(QtCore.QSize(0, 10))
+        self.footer.setMinimumSize(QtCore.QSize(0, 20))
         self.footer.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.footer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.footer.setObjectName("footer")
@@ -588,7 +452,7 @@ class Ui_Debug(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.frame_2.sizePolicy().hasHeightForWidth())
         self.frame_2.setSizePolicy(sizePolicy)
-        self.frame_2.setMinimumSize(QtCore.QSize(786, 0))
+        self.frame_2.setMinimumSize(QtCore.QSize(786, 15))
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -610,9 +474,9 @@ class Ui_Debug(object):
         self.sizegrip.setMinimumSize(QtCore.QSize(12, 12))
         self.sizegrip.setMaximumSize(QtCore.QSize(12, 12))
         self.sizegrip.setText("")
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(QtGui.QPixmap(":/icons/icons/grid.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.sizegrip.setIcon(icon10)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/icons/icons/grid.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.sizegrip.setIcon(icon6)
         self.sizegrip.setIconSize(QtCore.QSize(12, 12))
         self.sizegrip.setObjectName("sizegrip")
         self.horizontalLayout_5.addWidget(self.sizegrip)
@@ -622,21 +486,23 @@ class Ui_Debug(object):
         Debug.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Debug)
+        self.tabWidget.setCurrentIndex(-1)
         QtCore.QMetaObject.connectSlotsByName(Debug)
 
     def retranslateUi(self, Debug):
         _translate = QtCore.QCoreApplication.translate
         Debug.setWindowTitle(_translate("Debug", "Debugger"))
         self.label.setText(_translate("Debug", "PyNar Hata Ayıklayıcı"))
-        self.helptext.setText(_translate("Debug", "<html><head/><body><h4 style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:medium; font-weight:700;\">Yardım</span></h4><h5 style=\" margin-top:12px; margin-bottom:4px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:small; font-weight:700;\">Hata Ayıklama Kısayolları:</span></h5><ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">1.Tuş</span><span style=\" font-weight:700; color:#ff0000;\">:</span> Mevcut seviyede kalarak bir sonraki satıra geçin. </li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">2.Tuş</span><span style=\" font-weight:700; color:#ff0000;\">:</span> Bir sonraki satıra geçin ve varsa bir işleve geçin. </li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">3.Tuş</span><span style=\" font-weight:700; color:#ff0000;\">:</span> geçerli işlevden çıkın. </li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">4.Tuş</span><span style=\" font-weight:700; color:#ff0000;\">:</span><span style=\" font-weight:700;\"/>yürütmeye devam edin. </li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">Gönder Tuşu</span><span style=\" font-weight:700; color:#ff0000;\">:</span> Bir PDB komutu gönderin (komut alanından). </li><li style=\" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700; color:#ff0000;\">Çalıştırılan dosya</span> kutusundaki bir satır numarasını tıklayın: bir kesme noktası ayarlayın veya kaldırın. </li></ul></body></html>"))
+        self.helptext.setText(_translate("Debug", "<html><head/><body><h4 style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:medium; font-weight:700;\">Yardım</span></h4><ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">Step</span><span style=\" font-weight:700; color:#ff0000;\">:</span> Mevcut seviyede kalarak bir sonraki satıra geçin. </li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">Next</span><span style=\" font-weight:700; color:#ff0000;\">:</span> Bir sonraki satıra geçin ve varsa bir işleve geçin. </li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">Return</span><span style=\" font-weight:700; color:#ff0000;\">:</span> Geçerli işlevden çıkın. </li><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Courier New\'; font-weight:700; color:#ff0000;\">Continue</span><span style=\" font-weight:700; color:#ff0000;\">: </span>Yürütmeye devam edin. </li><ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ff0000;\">Kesme Noktası</span><span style=\" font-weight:700; color:#0000ff;\">eklemek</span> için konsol kutusuna b yazıp eklemek istediğiniz satırın numarasını yazın.(örn: b 8 )-&gt;&gt;(8.satıra kesme noktası ekler).</li></ul><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ff0000;\">Kesme Noktası</span><span style=\" font-weight:700; color:#0000ff;\">kaldırmak</span> için konsol kutusuna cl yazıp kaldırmak istediğiniz kesme noktası kaçıncı sıradaysa onu yazınız.(örn: cl 3)-&gt;&gt;(üçüncü eklenen kesme noktasını kaldırır).</li></ul><ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ff0000;\">Kesme Noktası</span><span style=\" font-weight:700; color:#0000ff;\">eklemek</span> için Çalıştırılan dosya kutusundaki satır numaralarının sağına tıklayınız.</li></ul><ul style=\"margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;\"><li style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" color:#ff0000;\">Kesme Noktası</span><span style=\" font-weight:700; color:#0000ff;\">kaldırmak</span> için Çalıştırılan dosya kutusundaki daha önce eklenmiş Kesme noktasına tıklayarak kaldırabilirsiniz.</li></ul><p><br/></p></body></html>"))
         self._3not.setText(_translate("Debug", "Çalıştırılan Dosya"))
         self._1not.setText(_translate("Debug", "Değişkenler"))
-        self._1step.setToolTip(_translate("Debug", "<html><head/><body><p>Mevcut seviyede kalarak bir sonraki satıra geçin. </p></body></html>"))
-        self._2intofunc.setToolTip(_translate("Debug", "<html><head/><body><p>Bir sonraki satıra geçin ve varsa bir işleve geçin. </p></body></html>"))
-        self._3fromfunc.setToolTip(_translate("Debug", "<html><head/><body><p>Geçerli işlevden çıkın. </p></body></html>"))
-        self._4execution.setToolTip(_translate("Debug", "<html><head/><body><p>Yürütmeye devam edin. </p></body></html>"))
-        self._5help.setToolTip(_translate("Debug", "<html><head/><body><p>Yardım Menüsü.</p></body></html>"))
-        self.label_2.setText(_translate("Debug", "Komut"))
-        self.comline.setPlaceholderText(_translate("Debug", "Komutunuzu buraya girebilirsiniz."))
-        self.sendButton.setText(_translate("Debug", "Gönder"))
+        self.button_step.setToolTip(_translate("Debug", "<html><head/><body><p><span style=\" color:#0d6efd;\">Mevcut seviyede kalarak bir sonraki satıra geçin. </span></p></body></html>"))
+        self.button_step.setText(_translate("Debug", "Step"))
+        self.button_next.setToolTip(_translate("Debug", "<html><head/><body><p><span style=\" color:#0d6efd;\">Bir sonraki satıra geçin ve varsa bir işleve geçin.  </span></p></body></html>"))
+        self.button_next.setText(_translate("Debug", "Next"))
+        self.button_return.setToolTip(_translate("Debug", "<html><head/><body><p><span style=\" color:#0d6efd;\">Geçerli işlevden çıkın.</span></p></body></html>"))
+        self.button_return.setText(_translate("Debug", "Return"))
+        self.button_continue.setToolTip(_translate("Debug", "<html><head/><body><p><span style=\" color:#0d6efd;\">Yürütmeye devam edin.</span></p></body></html>"))
+        self.button_continue.setText(_translate("Debug", "Continue"))
+        self.button_help.setToolTip(_translate("Debug", "<html><head/><body><p><span style=\" color:#0d6efd;\">Yardım Menüsü.</span></p></body></html>"))
 import icons_rc
