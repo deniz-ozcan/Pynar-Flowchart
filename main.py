@@ -1,3 +1,4 @@
+from pdb import Pdb
 import sys
 from PyQt5.QtWidgets import (
     QMainWindow,
@@ -23,13 +24,17 @@ from PyQt5.QtCore import (
     pyqtSignal,
     QCoreApplication,
 )
+
 from debug import Ui_Debug
 from os.path import join, dirname
 from PyQt5.Qsci import QsciScintilla, QsciLexerPython
-import io
+from io import StringIO
 from logging import getLogger, DEBUG
 LOGGER = getLogger('HelpUs')
 LOGGER.setLevel(DEBUG)
+# pyuic5 C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\debug.ui -o C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\debug.py
+# pyrcc5 C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\icons.qrc -o C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\icons_rc.py
+# pyinstaller --onefile -w -i .\main.py
 
 
 class PythonLexer(QsciLexerPython):
@@ -42,42 +47,6 @@ class PythonLexer(QsciLexerPython):
             return 'self '+'super ' + keywords
 
 
-class XStream(QObject):
-    _stdout = None
-    _stderr = None
-    messageWritten = pyqtSignal(str)
-
-    @staticmethod
-    def flush():
-        pass
-
-    @staticmethod
-    def fileno():
-        return -1
-
-    def write(self, msg):
-        if not self.signalsBlocked():
-            self.messageWritten.emit(msg)
-
-    @staticmethod
-    def stdout():
-        if not XStream._stdout:
-            XStream._stdout = XStream()
-            sys.stdout = XStream._stdout
-        return XStream._stdout
-
-    @staticmethod
-    def stderr():
-        if not XStream._stderr:
-            XStream._stderr = XStream()
-            sys.stderr = XStream._stderr
-        return XStream._stderr
-
-# pyuic5 C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\debug.ui -o C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\debug.py
-# pyrcc5 C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\icons.qrc -o C:\Users\sauda\Masaüstü\SOFTWARE\WINDOWS\PyNar\ZDebug\icons_rc.py
-# pyinstaller --onefile -w -i .\Brand.png .\_0BankApplication.py
-
-
 class CodeEditor(QsciScintilla):
 
     def __init__(self, parent=None):
@@ -87,9 +56,10 @@ class CodeEditor(QsciScintilla):
         self.mainWindow = parent
         self.debugging = False
         self.pointSize = 13
+        self.setStyleSheet("background-color:#1e1e1e;color:#858585;")
         self.tabWidth = 4
-        self.verticalScrollBar().setStyleSheet("QScrollBar:vertical{border-radius:5px;background:transparent;width:10px;margin:0}QScrollBar::handle:vertical{border-radius:5px;background:#88888888;min-width:5px;max-width:5px;min-height:50px;max-height:50px;width:5px;height:5px}QScrollBar::handle:vertical:hover{background:#888}QScrollBar::add-line:vertical{height:0;subcontrol-position:bottom;subcontrol-origin:margin}QScrollBar::sub-line:vertical{height:0;subcontrol-position:top;subcontrol-origin:margin}QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical{background:transparent;border-radius:6px;}")
-        self.horizontalScrollBar().setStyleSheet("QScrollBar:horizontal{border-radius:5px;background:transparent;height:10px;margin:0}QScrollBar::handle:horizontal{border-radius:5px;background:#88888888;min-width:50px;max-width:50px;min-height:5px;max-height:5px;width:5px;height:5px}QScrollBar::handle:horizontal:hover{background:#888}QScrollBar::add-line:horizontal{height:0;subcontrol-position:bottom;subcontrol-origin:margin}QScrollBar::sub-line:horizontal{height:0;subcontrol-position:top;subcontrol-origin:margin}QScrollBar::add-page:horizontal,QScrollBar::sub-page:horizontal{background:transparent;border-radius:6px;}")
+        self.verticalScrollBar().setStyleSheet("QScrollBar:vertical {border-radius: 5px;background:transparent;width:10px;margin:0px;}QScrollBar::handle:vertical {border-radius: 5px;background: #88888888;min-width:5px;max-width:5px;min-height:50px;max-height:50px;width:5px;height:5px;}QScrollBar::handle:vertical:hover {background: #888888;}QScrollBar::add-line:vertical {height: 0px;subcontrol-position: bottom;subcontrol-origin: margin;}QScrollBar::sub-line:vertical {height: 0px;subcontrol-position: top;subcontrol-origin: margin;}QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background:transparent;}")
+        self.horizontalScrollBar().setStyleSheet("QScrollBar:horizontal {border-radius: 5px;background:transparent;height:10px;margin:0px;}QScrollBar::handle:horizontal {border-radius: 5px;background: #88888888;min-width:50px;max-width:50px;min-height:5px;max-height:5px;width:5px;height:5px;}QScrollBar::handle:horizontal:hover {background: #888888;}QScrollBar::add-line:horizontal {height: 0px;subcontrol-position: bottom;subcontrol-origin: margin;}QScrollBar::sub-line:horizontal {height: 0px;subcontrol-position: top;subcontrol-origin: margin;}QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {background:transparent;}")
         self.setMatchedBraceBackgroundColor(QColor('#1e1e1e'))
         self.setMatchedBraceForegroundColor(QColor('green'))
         self.setUnmatchedBraceBackgroundColor(QColor('#1e1e1e'))
@@ -101,8 +71,6 @@ class CodeEditor(QsciScintilla):
         self.font.setFixedPitch(True)
         self.font.setPointSize(self.pointSize)
         self.setFont(self.font)
-        file_path = join(dirname(__file__), "./main.py")
-        self.setText(open(file_path, encoding="utf-8").read())
         fontmetrics = QFontMetrics(self.font)
         self.setMarginsFont(self.font)
         self.setMarginWidth(0, fontmetrics.width("00000") + 5)
@@ -166,10 +134,10 @@ class CodeEditor(QsciScintilla):
     def onMarginClicked(self, margin, line, modifiers):
         if self.markersAtLine(line) != 0:
             self.markerDelete(line, 8)
-            print(f"cl {join(dirname(__file__), './main.py')}:{line+1} ", end = "")
+            print(f"cl {join(dirname(__file__), './main.py')}:{line+1} ", end="")
         else:
             self.markerAdd(line, 8)
-            print(f"b {line + 1} ", end = "")
+            print(f"b {line + 1} ", end="")
 
     def breakpointContext(self):
         code = ''
@@ -186,7 +154,46 @@ class CodeEditor(QsciScintilla):
         self.setFolding(x)
 
 
-class MainWindow(QMainWindow, Ui_Debug):
+class XStream(QObject):
+    _stdout = None
+    _stderr = None
+    _stdin = None
+    messageWritten = pyqtSignal(str)
+
+    @staticmethod
+    def flush():
+        pass
+
+    @staticmethod
+    def fileno():
+        return -1
+
+    # def stdin():
+    #     if not XStream._stdin:
+    #         XStream._stdin = XStream()
+    #         sys.stdin = XStream._stdin
+    #     return XStream._stdin
+
+    def write(self, msg):
+        if not self.signalsBlocked():
+            self.messageWritten.emit(msg)
+
+    @staticmethod
+    def stdout():
+        if not XStream._stdout:
+            XStream._stdout = XStream()
+            sys.stdout = XStream._stdout
+        return XStream._stdout
+
+    @staticmethod
+    def stderr():
+        if not XStream._stderr:
+            XStream._stderr = XStream()
+            sys.stderr = XStream._stderr
+        return XStream._stderr
+
+
+class MainWindow(QMainWindow, Ui_Debug, Pdb):
     _stdout = None
     _stderr = None
     messageWritten = pyqtSignal(str)
@@ -199,47 +206,43 @@ class MainWindow(QMainWindow, Ui_Debug):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__()
         self.setupUi(self)
+        QSizeGrip(self.sizegrip)
+        self.console = QTextEdit(parent)
+        self.console.setStyleSheet(
+            "border-radius:6px;background-color:#1e1e1e;color:white;	font: 400 10pt 'Segoe UI';")
+        self.console.insertPlainText = self.__insert_plain_text
+        self.console.keyPressEvent = self.__key_press_event
+        self.horizontalLayout_14.addWidget(self.console)
         self.codeToShow()
+        XStream.stdout().messageWritten.connect(self.console.insertPlainText)
+        XStream.stderr().messageWritten.connect(self.console.insertPlainText)
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.closeBut.clicked.connect(self.close)
         self.minimize.clicked.connect(self.restoreOrMaximized)
         self.downBut.clicked.connect(self.showMinimized)
         self.header.mouseMoveEvent = self.moveWindow
-
         self.button_help.clicked.connect(self.helpMenu)
-        QSizeGrip(self.sizegrip)
-        self.console = QTextEdit(parent)
-        
-        self.console.setStyleSheet(
-            "border-radius:6px;background-color:#1e1e1e;color:white;	font: 400 10pt 'Segoe UI';")
-        self.console.insertPlainText = self.__insert_plain_text
-        self.console.keyPressEvent = self.__key_press_event
-        self.horizontalLayout_14.addWidget(self.console)
-        self.button_step.clicked.connect(self.__push_button)
-        self.button_next.clicked.connect(self.__push_button)
-        self.button_return.clicked.connect(self.__push_button)
-        self.button_continue.clicked.connect(self.__push_button)
-        self.buffer = io.StringIO()
-        self.__set_enable_gui(False)
+        self.button_step.clicked.connect(
+            lambda: self.console.insertPlainText("step "))
+        self.button_next.clicked.connect(
+            lambda: self.console.insertPlainText("next "))
+        self.button_return.clicked.connect(
+            lambda: self.console.insertPlainText("return "))
+        self.button_continue.clicked.connect(
+            lambda: self.console.insertPlainText("continue "))
+        self.buffer = StringIO()
+        Pdb.__init__(self, stdin=self.console, stdout=self.console)
         self.showNormal()
 
-    def __set_enable_gui(self, state=True):
-        # self.console.setEnabled(state)
-        self.button_step.setEnabled(state)
-        self.button_next.setEnabled(state)
-        self.button_return.setEnabled(state)
-        self.button_continue.setEnabled(state)
-        if state:
-            self.console.setFocus()
-
-    def redirect_outerr_stream(self):
-        XStream.stdout().messageWritten.connect(self.console.insertPlainText)
-        XStream.stderr().messageWritten.connect(self.console.insertPlainText)
+    def __reset_buffer(self):
+        if isinstance(self.buffer, StringIO):
+            self.buffer.truncate(0)
+            self.buffer.seek(0)
+        else:
+            self.buffer = StringIO()
 
     def readline(self):
-        if not self.console.isEnabled():
-            self.__set_enable_gui(True)
         self.__reset_buffer()
         while self.buffer.tell() == 0:
             QCoreApplication.processEvents()
@@ -285,7 +288,6 @@ class MainWindow(QMainWindow, Ui_Debug):
 
             self.__reset_buffer()
             self.buffer.write(text)
-            self.__set_enable_gui(False)
 
         # If User want to delete something and there is no value in buffer -> Reject
         if event.key() == Qt.Key.Key_Backspace or event.key() == Qt.Key.Key_Delete:
@@ -309,22 +311,7 @@ class MainWindow(QMainWindow, Ui_Debug):
 
         # Set Console Text to Black
         self.console.setTextColor(Qt.GlobalColor.white)
-        # Execute default method
         QTextEdit.keyPressEvent(self.console, event)
-
-    def __push_button(self):
-
-        button_scope = self.sender().text().lower()
-        self.__reset_buffer()
-        self.buffer.write(button_scope)
-        self.__set_enable_gui(False)
-
-    def __reset_buffer(self):
-        if isinstance(self.buffer, io.StringIO):
-            self.buffer.truncate(0)
-            self.buffer.seek(0)
-        else:
-            self.buffer = io.StringIO()
 
     def __insert_plain_text(self, message):
         if message.startswith(self.HOOK_HEADER):
@@ -337,22 +324,26 @@ class MainWindow(QMainWindow, Ui_Debug):
             return
         elif message.startswith('b'):
             self.console.setTextColor(Qt.GlobalColor.green)
-            QTextEdit.insertPlainText(self.console,message)
+            QTextEdit.insertPlainText(self.console, message)
             self.__reset_buffer()
             self.buffer.write(message)
-            self.__set_enable_gui(False)
             return
         elif message.startswith('cl'):
             self.console.setTextColor(Qt.GlobalColor.yellow)
-            QTextEdit.insertPlainText(self.console,message)
+            QTextEdit.insertPlainText(self.console, message)
             self.__reset_buffer()
             self.buffer.write(message)
-            self.__set_enable_gui(False)
+            return
+        elif message.startswith('step') or message.startswith('next') or message.startswith('return') or message.startswith('continue'):
+            self.console.setTextColor(Qt.GlobalColor.cyan)
+            QTextEdit.insertPlainText(self.console, message)
+            self.__reset_buffer()
+            self.buffer.write(message)
             return
         if message.startswith('***'):
             self.console.setTextColor(Qt.GlobalColor.red)
 
-        QTextEdit.insertPlainText(self.console,message)
+        QTextEdit.insertPlainText(self.console, message)
         self.console.verticalScrollBar().setValue(
             self.console.verticalScrollBar().maximum())
 
@@ -367,6 +358,8 @@ class MainWindow(QMainWindow, Ui_Debug):
 
     def codeToShow(self):
         editor = CodeEditor()
+        file = join(dirname(__file__), './main.py')
+        editor.setText(open(file, encoding="utf-8").read())
         self.tabWidget.addTab(editor, "")
 
     def moveWindow(self, event):
@@ -417,23 +410,26 @@ def get_qtconsole_object():
         return MainWindow.console
 
 
-def setup_breakpoint_hook(parent, method, redirect_streams=False):
+def setup_breakpoint_hook(method):
+    if not isinstance(sys.stdin, MainWindow):
+        sys.stdin = MainWindow()
+
     def __method(*args, **kwargs):
         breakpoint()
         return method(*args, **kwargs)
-
-    if not isinstance(sys.stdin, MainWindow):
-        sys.stdin = MainWindow(parent)
-
-    if redirect_streams:
-        sys.stdin.redirect_outerr_stream()
     return __method
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    LOGGER.error('')
-    LOGGER.error = setup_breakpoint_hook(
-        None, LOGGER.error, redirect_streams=True)
-    LOGGER.error('')
+    LOGGER.info('')
+    LOGGER.info = setup_breakpoint_hook(LOGGER.info)
+    LOGGER.info('')
     sys.exit(app.exec_())
+
+
+# if __name__ == "__main__":
+#     app = QApplication(sys.argv)
+#     window = MainWindow()
+#     window.show()
+#     sys.exit(app.exec_())
