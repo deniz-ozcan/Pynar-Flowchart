@@ -198,7 +198,8 @@
 #     main = mainWindow()
 #     main.show()
 #     sys.exit(app.exec_())
-
+##############################################################################
+##############################################################################
 # class PlainTextEdit(QPlainTextEdit):
 #     commandSignal = pyqtSignal(str)
 #     commandZPressed = pyqtSignal(str)
