@@ -1,46 +1,73 @@
-from PyQt5.QtCore import QDataStream, QIODevice
-from PyQt5.QtWidgets import QApplication, QDialog
-from PyQt5.QtNetwork import QTcpSocket, QAbstractSocket
+import sys
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QSplitter,QVBoxLayout,QDialog, QPushButton, QApplication,QTextEdit,QLineEdit
+import socket
+from threading import Thread 
 
-class Client(QDialog):
+tcpClientA=None
+
+class Window(QDialog):
     def __init__(self):
         super().__init__()
-        self.tcpSocket = QTcpSocket(self)
-        self.blockSize = 0
-        self.makeRequest()
-        self.tcpSocket.waitForConnected(1000)
-        # send any message you like it could come from a widget text.
-        self.tcpSocket.write(b'hello')
-        self.tcpSocket.readyRead.connect(self.dealCommunication)
-        self.tcpSocket.error.connect(self.displayError)
+        self.flag=0
+        self.chatTextField=QLineEdit(self)
+        self.chatTextField.resize(480,100)
+        self.chatTextField.move(10,350)
+        self.btnSend=QPushButton("Send",self)
+        self.btnSend.resize(480,30)
+        self.btnSendFont=self.btnSend.font()
+        self.btnSendFont.setPointSize(15)
+        self.btnSend.setFont(self.btnSendFont)
+        self.btnSend.move(10,460)
+        self.btnSend.setStyleSheet("background-color: #F7CE16")
+        self.btnSend.clicked.connect(self.send)
+        self.chatBody=QVBoxLayout(self)
+        splitter=QSplitter(QtCore.Qt.Vertical)
+        self.chat = QTextEdit()
+        self.chat.setReadOnly(True)
+        splitter.addWidget(self.chat)
+        splitter.addWidget(self.chatTextField)
+        splitter.setSizes([400,100])
+        splitter2=QSplitter(QtCore.Qt.Vertical)
+        splitter2.addWidget(splitter)
+        splitter2.addWidget(self.btnSend)
+        splitter2.setSizes([200,10])
+        self.chatBody.addWidget(splitter2)
+        self.setWindowTitle("Chat Application")
+        self.resize(500, 500)
 
-    def makeRequest(self):
-        HOST = '127.0.0.1'
-        PORT = 4544
-        self.tcpSocket.connectToHost(HOST, PORT, QIODevice.ReadWrite)
+    def send(self):
+        text=self.chatTextField.text()
+        font=self.chat.font()
+        font.setPointSize(13)
+        self.chat.setFont(font)
+        textFormatted='{:>80}'.format(text)
+        self.chat.append(textFormatted)
+        tcpClientA.send(text.encode())
+        self.chatTextField.setText("")
 
-    def dealCommunication(self):
-        instr = QDataStream(self.tcpSocket)
-        instr.setVersion(QDataStream.Qt_5_0)
-        if self.blockSize == 0:
-            if self.tcpSocket.bytesAvailable() < 2:
-                return
-            self.blockSize = instr.readUInt16()
-        if self.tcpSocket.bytesAvailable() < self.blockSize:
-            return
-        # Print response to terminal, we could use it anywhere else we wanted.
-        print(str(instr.readString(), encoding='ascii'))
+class ClientThread(Thread):
+    def __init__(self,window): 
+        Thread.__init__(self) 
+        self.window=window
 
-    def displayError(self, socketError):
-        if socketError == QAbstractSocket.RemoteHostClosedError:
-            pass
-        else:
-            print(self, "The following error occurred: %s." % self.tcpSocket.errorString())
+    def run(self): 
+        host = "localhost"
+        port = 4544
+        BUFFER_SIZE = 2000 
+        global tcpClientA
+        tcpClientA = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        tcpClientA.connect((host, port))
+        
+        while True:
+            data = tcpClientA.recv(BUFFER_SIZE)
+            window.chat.append(data.decode("utf-8"))
 
 
 if __name__ == '__main__':
-    import sys
     app = QApplication(sys.argv)
-    client = Client()
-    client.show()
-    sys.exit(client.exec_())
+    window = Window()
+    clientThread=ClientThread(window)
+    clientThread.start()
+    window.exec()
+    sys.exit(app.exec_())
