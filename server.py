@@ -1,55 +1,102 @@
 import sys
-from PyQt5.QtCore import QByteArray, QDataStream, QIODevice
-from PyQt5.QtWidgets import QApplication, QDialog
-from PyQt5.QtNetwork import QHostAddress, QTcpServer
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QSplitter,QVBoxLayout,QDialog, QPushButton, QApplication,QTextEdit,QLineEdit
+import socket
+from threading import Thread
+conn = None
 
-class Server(QDialog):
+class Window(QDialog):
     def __init__(self):
         super().__init__()
-        self.tcpServer = None
-    def sessionOpened(self):
-        self.tcpServer = QTcpServer(self)
-        PORT = 4544
-        address = QHostAddress('127.0.0.1')
-        if not self.tcpServer.listen(address, PORT):
-            print("cant listen!")
-            self.close()
-            return
-        self.tcpServer.newConnection.connect(self.dealCommunication)
+        self.flag = 0
+        self.chatTextField = QLineEdit(self)
+        self.chatTextField.resize(480, 100)
+        self.chatTextField.move(10, 350)
+        self.btnSend = QPushButton("Send", self)
+        self.btnSend.resize(480, 30)
+        self.btnSendFont = self.btnSend.font()
+        self.btnSendFont.setPointSize(15)
+        self.btnSend.setFont(self.btnSendFont)
+        self.btnSend.move(10, 460)
+        self.btnSend.setStyleSheet("background-color: #F7CE16")
+        self.btnSend.clicked.connect(self.send)
+        self.chatBody = QVBoxLayout(self)
+        splitter = QSplitter(QtCore.Qt.Vertical)
+        self.chat = QTextEdit()
+        self.chat.setReadOnly(True)
+        splitter.addWidget(self.chat)
+        splitter.addWidget(self.chatTextField)
+        splitter.setSizes([400, 100])
+        splitter2 = QSplitter(QtCore.Qt.Vertical)
+        splitter2.addWidget(splitter)
+        splitter2.addWidget(self.btnSend)
+        splitter2.setSizes([200, 10])
 
-    def dealCommunication(self):
-        # Get a QTcpSocket from the QTcpServer
-        clientConnection = self.tcpServer.nextPendingConnection()
-        # instantiate a QByteArray
-        block = QByteArray()
-        # QDataStream class provides serialization of binary data to a QIODevice
-        out = QDataStream(block, QIODevice.ReadWrite)
-        # We are using PyQt5 so set the QDataStream version accordingly.
-        out.setVersion(QDataStream.Qt_5_0)
-        out.writeUInt16(0)
-        # this is the message we will send it could come from a widget.
-        message = "Goodbye!"
-        # get a byte array of the message encoded appropriately.
-        message = bytes(message, encoding='ascii')
-        # now use the QDataStream and write the byte array to it.
-        out.writeString(message)
-        out.device().seek(0)
-        out.writeUInt16(block.size() - 2)
-        # wait until the connection is ready to read
-        clientConnection.waitForReadyRead()
-        # read incomming data
-        instr = clientConnection.readAll()
-        # in this case we print to the terminal could update text of a widget if we wanted.
-        print(str(instr, encoding='ascii'))
-        # get the connection ready for clean up
-        clientConnection.disconnected.connect(clientConnection.deleteLater)
-        # now send the QByteArray.
-        clientConnection.write(block)
-        # now disconnect connection.
-        clientConnection.disconnectFromHost()
+        self.chatBody.addWidget(splitter2)
+
+        self.setWindowTitle("Chat Application")
+        self.resize(500, 500)
+
+    def send(self):
+        text = self.chatTextField.text()
+        font = self.chat.font()
+        font.setPointSize(13)
+        self.chat.setFont(font)
+        textFormatted = '{:>80}'.format(text)
+        self.chat.append(textFormatted)
+        global conn
+        conn.send(text.encode("utf-8"))
+        self.chatTextField.setText("")
+
+
+class ServerThread(Thread):
+    def __init__(self, window):
+        Thread.__init__(self)
+        self.window = window
+
+    def run(self):
+        TCP_IP = 'localhost'
+        TCP_PORT = 4544
+        BUFFER_SIZE = 20
+        tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        tcpServer.bind((TCP_IP, TCP_PORT))
+        threads = []
+
+        tcpServer.listen(4)
+        while True:
+            global conn
+            (conn, (ip, port)) = tcpServer.accept()
+            newthread = ClientThread(ip, port, window)
+            newthread.start()
+            threads.append(newthread)
+
+        for t in threads:
+            t.join()
+
+
+class ClientThread(Thread):
+
+    def __init__(self, ip, port, window):
+        Thread.__init__(self)
+        self.window = window
+        self.ip = ip
+        self.port = port
+
+    def run(self):
+        while True:
+            global conn
+            data = conn.recv(2048)
+            window.chat.append(data.decode("utf-8"))
+            print(data)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    server = Server()
-    server.sessionOpened()
-    sys.exit(server.exec_())
+
+    window = Window()
+    serverThread = ServerThread(window)
+    serverThread.start()
+    window.exec()
+
+    sys.exit(app.exec_())
