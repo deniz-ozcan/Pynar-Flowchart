@@ -87,6 +87,9 @@ class Ui_Builder(object):
         self.magnifyminus.setText(" ")
         self.magnifyminus.setToolTip("Uzaklaştır")
         self.magnifyminus.setShortcut("Ctrl+-")
+        self.exitact = QAction(Builder)
+        self.exitact.setObjectName("action_k")
+        self.filemenu.addAction(self.exitact)
         self.exitact.setText("Çıkış")
 
 class Browser(web.QWebEngineView):
