@@ -87,7 +87,7 @@ class Ui_Builder(object):
         self.magnifyminus.setText(" ")
         self.magnifyminus.setToolTip("Uzaklaştır")
         self.magnifyminus.setShortcut("Ctrl+-")
-
+        self.exitact.setText("Çıkış")
 
 class Browser(web.QWebEngineView):
 
@@ -108,6 +108,7 @@ class Web_Builder(QMainWindow, Ui_Builder):
         self.toolBar.setMovable(False)
         self.magnifyplus.triggered.connect(self.magnifypluser)
         self.magnifyminus.triggered.connect(self.magnifyminuser)
+        self.exitact.triggered.connect(self.close)
 
     def openTab(self):
         self.horizontalLayout_2 = QHBoxLayout(self.view)
