@@ -1,17 +1,16 @@
 from pyflowchart import Flowchart
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget
-from PyQt5.QtCore import Qt, QUrl, QMetaObject, QSize, Qt, QRect, QVariant
-from PyQt5.QtGui import QPixmap, QIcon, QFont, QPageSize, QPageLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel, QMessageBox
+from PyQt5.QtCore import Qt, QUrl, QMetaObject, QSize, Qt, QRect,QTimer
+from PyQt5.QtGui import QPixmap, QIcon, QFont, QPageSize, QPageLayout, QMovie
 import icons_rc
 from PyQt5 import QtWebEngineWidgets as web
 from sys import exit, argv
-from os.path import dirname, join, abspath, exists, basename
+from os.path import dirname, join, abspath, exists
 from platform import system
 from os import environ, makedirs
 # pyrcc5 icons.qrc -o icons_rc.py
 # pyuic5 builder.ui -o builder.py
 from subprocess import check_output
-
 
 class Ui_Builder(object):
     def setupUi(self, Builder):
@@ -129,6 +128,9 @@ class Browser(web.QWebEngineView):
         self.setHtml(html, baseUrl=self.url)
 
 
+
+
+
 class Web_Builder(QMainWindow, Ui_Builder):
     pagewidth = 0
     pageheight = 0
@@ -146,6 +148,18 @@ class Web_Builder(QMainWindow, Ui_Builder):
         self.grabpage.triggered.connect(self.grabcursor)
         self.tabWidget.tabCloseRequested.connect(self.closeTab)
         self.browser.loadFinished.connect(self.onLoadFinished)
+        self.movie = QMovie(":/icons/icons/flowchart.gif")
+        self.label = QLabel()
+        self.label.setMinimumSize(QSize(200, 200))
+        self.label.setMaximumSize(QSize(200, 200))
+        self.label.setObjectName("lb1")
+        self.label.setMovie(self.movie)
+        self.loading = QMessageBox()
+        self.loading.layout().addWidget(self.label)
+        self.loading.layout().setAlignment(Qt.AlignCenter | Qt.AlignCenter)
+        self.loading.setWindowFlags(Qt.FramelessWindowHint)
+        self.loading.setAttribute(Qt.WA_TranslucentBackground)
+        self.loading.setStandardButtons(QMessageBox.NoButton)
 
     def onLoadFinished(self, ok):
         if ok:
@@ -174,8 +188,7 @@ class Web_Builder(QMainWindow, Ui_Builder):
         file_path = join(dirname(__file__), "./test.py")
         with open(file_path) as f:
             code = f.read()
-        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(
-            ' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
+        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
         self.browser = Browser(htmlstart+"<script>\n" +
                                jsfile+"</script>\n"+htmlmid + str(fc) + htmlend)
         self.statusBar.showMessage("Dosya açıldı", 2000)
@@ -197,13 +210,19 @@ class Web_Builder(QMainWindow, Ui_Builder):
         file_path = join(dirname(__file__), "./test.py")
         with open(file_path) as f:
             code = f.read()
-        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
+        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(
+            ' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
         self.browser = Browser(htmlstart+"<script>\n" +jsfile+"</script>\n"+htmlmid + str(fc) + htmlend)
         self.horizontalLayout_3.addWidget(self.browser)
         self.tabWidget.addTab(self.tab, f"")
 
     def closeTab(self, index):
         self.tabWidget.removeTab(index)
+        self.movie.start()
+        QTimer.singleShot(1000, lambda : self.loading.done(0))
+        if self.loading.exec_() == QMessageBox.Yes:
+            pass
+        self.movie.stop()
 
     def magnifypluser(self):
         self.browser.setZoomFactor(self.browser.zoomFactor() + 0.1)
@@ -216,22 +235,25 @@ class Web_Builder(QMainWindow, Ui_Builder):
         self.openTab()
 
     def saveFile(self):
-        print(Web_Builder.pagewidth, Web_Builder.pageheight)
         if(Web_Builder.pagewidth != 0 and Web_Builder.pageheight != 0):
             dialog = QFileDialog(self)
             dialog.setViewMode(QFileDialog.List)
             plt = system()
             if plt == "Windows":
-                documents_dir = join(environ['USERPROFILE'] + "/Documents/PynarKutu/")
+                documents_dir = join(
+                    environ['USERPROFILE'] + "/Documents/PynarKutu/")
             elif plt == "Linux":
-                documents_dir = check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip() + "/PynarKutu"
+                documents_dir = check_output(
+                    ["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip() + "/PynarKutu"
             if not exists(documents_dir):
                 makedirs(documents_dir)
-            filename = dialog.getSaveFileName(self, "Kaydet", documents_dir, "Flowchart Pdf (*.pdf)")
+            filename = dialog.getSaveFileName(
+                self, "Kaydet", documents_dir, "Flowchart Pdf (*.pdf)")
             if filename[0]:
                 fullpath = filename[0]
                 pagelay = QPageLayout()
-                pagelay.setPageSize(QPageSize(QSize(Web_Builder.pagewidth, Web_Builder.pageheight), "A4"))
+                pagelay.setPageSize(
+                    QPageSize(QSize(Web_Builder.pagewidth, Web_Builder.pageheight), "A4"))
                 if(not fullpath.endswith(".pdf")):
                     fullpath += ".pdf"
                 try:
@@ -242,8 +264,11 @@ class Web_Builder(QMainWindow, Ui_Builder):
             else:
                 self.statusBar.showMessage('Dosya kayıt edilemedi !', 3000)
         else:
-            self.statusBar.showMessage(
-                'Sayfanın Yüklenmesini bekleyiniz', 3000)
+            self.movie.start()
+            QTimer.singleShot(1000, lambda : self.loading.done(0))
+            if self.loading.exec_() == QMessageBox.Yes:
+                pass
+            self.movie.stop()
 
 
 if __name__ == "__main__":
