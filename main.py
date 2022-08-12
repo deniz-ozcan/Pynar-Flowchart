@@ -146,7 +146,6 @@ class Web_Builder(QMainWindow, Ui_Builder):
         self.exitact.triggered.connect(self.close)
         self.defhome.triggered.connect(self.defhomepage)
         self.grabpage.triggered.connect(self.grabcursor)
-        self.tabWidget.tabCloseRequested.connect(self.closeTab)
         self.browser.loadFinished.connect(self.onLoadFinished)
         self.movie = QMovie(":/icons/icons/flowchart.gif")
         self.label = QLabel()
@@ -219,6 +218,8 @@ class Web_Builder(QMainWindow, Ui_Builder):
     def closeTab(self, index):
         self.tabWidget.removeTab(index)
         self.movie.start()
+        self.movie.setSpeed(250)
+        self.movie.setPaused(False)
         QTimer.singleShot(1000, lambda : self.loading.done(0))
         if self.loading.exec_() == QMessageBox.Yes:
             pass
@@ -253,7 +254,7 @@ class Web_Builder(QMainWindow, Ui_Builder):
                 fullpath = filename[0]
                 pagelay = QPageLayout()
                 pagelay.setPageSize(
-                    QPageSize(QSize(Web_Builder.pagewidth, Web_Builder.pageheight), "A4"))
+                    QPageSize(QSize(Web_Builder.pagewidth+100, Web_Builder.pageheight+100), "A4"))
                 if(not fullpath.endswith(".pdf")):
                     fullpath += ".pdf"
                 try:
@@ -268,6 +269,7 @@ class Web_Builder(QMainWindow, Ui_Builder):
             QTimer.singleShot(1000, lambda : self.loading.done(0))
             if self.loading.exec_() == QMessageBox.Yes:
                 pass
+            self.statusBar.showMessage('Dosya kayıt edilemedi !', 3000)
             self.movie.stop()
 
 
