@@ -266,10 +266,11 @@ class Web_Builder(QMainWindow, Ui_Builder):
                 self.statusBar.showMessage('Dosya kayıt edilemedi !', 3000)
         else:
             self.movie.start()
+            self.movie.setSpeed(250)
+            self.movie.setPaused(False)
             QTimer.singleShot(1000, lambda : self.loading.done(0))
             if self.loading.exec_() == QMessageBox.Yes:
                 pass
-            self.statusBar.showMessage('Dosya kayıt edilemedi !', 3000)
             self.movie.stop()
 
 
