@@ -1,5 +1,5 @@
 from pyflowchart import Flowchart
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel,QLineEdit, QMessageBox,QVBoxLayout
 from PyQt5.QtCore import Qt, QUrl, QMetaObject, QSize, Qt, QRect,QTimer
 from PyQt5.QtGui import QPixmap, QIcon, QFont, QPageSize, QPageLayout, QMovie
 import icons_rc
@@ -10,7 +10,7 @@ from platform import system
 from os import environ, makedirs
 from subprocess import check_output
 
-
+#pyuic5 advance.ui -o advance.py
 class Browser(web.QWebEngineView):
 
     def __init__(self, html=""):
@@ -20,6 +20,28 @@ class Browser(web.QWebEngineView):
         self.url = QUrl('file:///' + base_path)
         self.setHtml(html, baseUrl=self.url)
 
+class LoadingMessageBox(QMessageBox):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        movie = QMovie(':/icons/icons/loading.gif')
+        label_gif = QLabel(self)
+        label_gif.setMovie(movie)
+        label_gif.setAlignment(Qt.AlignCenter)
+        label_gif.setGeometry(QRect(18, 0, 205, 20))
+        label_text = QLineEdit("Dosya Düzenleniyor",self)
+        label_text.setReadOnly(True)
+        label_text.setStyleSheet("border:none; background-color:transparent")
+        label_text.setGeometry(QRect(18, 110, 185, 25))
+        label_text.setAlignment(Qt.AlignCenter)
+        label_text2 = QLineEdit("Lütfen bekleyiniz...",self)
+        label_text2.setReadOnly(True)
+        label_text2.setStyleSheet("border:none; background-color:transparent")
+        label_text2.setGeometry(QRect(18, 135, 185, 25))
+        label_text2.setAlignment(Qt.AlignCenter)
+        movie.start()
+        movie.setSpeed(250)
+        movie.setPaused(False)
 
 class FlowchartMaker(QMainWindow):
     pagewidth = 0
@@ -28,7 +50,6 @@ class FlowchartMaker(QMainWindow):
     def __init__(self):
         super(FlowchartMaker, self).__init__()
         self.setupUi(self)
-        self.openTab()
         self.savebut.triggered.connect(self.saveFile)
         self.toolBar.setMovable(False)
         self.magnifyplus.triggered.connect(self.magnifypluser)
@@ -36,20 +57,32 @@ class FlowchartMaker(QMainWindow):
         self.exitact.triggered.connect(self.close)
         self.defhome.triggered.connect(self.defhomepage)
         self.grabpage.triggered.connect(self.grabcursor)
-        self.browser.loadFinished.connect(self.onLoadFinished)
-        self.movie = QMovie(":/icons/icons/flowchart.gif")
-        self.label = QLabel()
-        self.label.setMinimumSize(QSize(200, 200))
-        self.label.setMaximumSize(QSize(200, 200))
-        self.label.setObjectName("lb1")
-        self.label.setMovie(self.movie)
-        self.loading = QMessageBox()
-        self.loading.layout().addWidget(self.label)
-        self.loading.layout().setAlignment(Qt.AlignCenter | Qt.AlignCenter)
-        self.loading.setWindowFlags(Qt.FramelessWindowHint)
-        self.loading.setAttribute(Qt.WA_TranslucentBackground)
+        self.loading = LoadingMessageBox()
+        font = QFont()
+        font.setFamily("Tahoma")
+        font.setPointSize(11)
+        self.loading.setFont(font)
+        txt="QMessageBox{ opacity: 0;border: 10px solid #acd33b;background-color: #e8f2c6;}QLabel{margin: 10px 10px;font-size: 14px;height: 110px; min-height: 110px; max-height: 110px; width: 155px; min-width: 155px; max-width: 155px;}QPushButton{background-color: #00aaff;color: white;font-size: 14px;padding: 5px 18px 5px 18px;text-align: center;text-decoration: none;display: inline-block;margin: 4px 2px;border-radius: 7px;}QPushButton:hover {background: #58c1e7;}"
+        self.loading.setStyleSheet(txt)
+        self.loading.setWindowFlags(self.loading.windowFlags() | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
         self.loading.setStandardButtons(QMessageBox.NoButton)
-
+        self.openfile.triggered.connect(self.openFile)
+        self.defhome.setDisabled(True)
+        self.grabpage.setDisabled(True)
+        self.magnifyminus.setDisabled(True)
+        self.magnifyplus.setDisabled(True)
+        self.savebut.setDisabled(True)
+    
+    def openFile(self):
+        self.file_path = QFileDialog.getOpenFileName(self, "Dosya Aç", "", "Python Dosyası (*.py)")[0]
+        if self.file_path:
+            self.openTab()
+            self.defhome.setEnabled(True)
+            self.grabpage.setEnabled(True)
+            self.magnifyminus.setEnabled(True)
+            self.magnifyplus.setEnabled(True)
+            self.savebut.setEnabled(True)
+    
     def setupUi(self, Builder):
         Builder.setObjectName("Builder")
         Builder.resize(1066, 572)
@@ -71,22 +104,23 @@ class FlowchartMaker(QMainWindow):
         self.view.setObjectName("view")
         self.horizontalLayout.addWidget(self.view)
         Builder.setCentralWidget(self.centralwidget)
-        self.menuBar = QMenuBar(Builder)
-        self.menuBar.setGeometry(QRect(0, 0, 1066, 22))
-        self.menuBar.setObjectName("menuBar")
-        self.filemenu = QMenu(self.menuBar)
+        self.flowBar = QMenuBar(Builder)
+        self.flowBar.setGeometry(QRect(0, 0, 1066, 22))
+        self.flowBar.setObjectName("flowBar")
+        self.filemenu = QMenu(self.flowBar)
         self.filemenu.setObjectName("filemenu")
-        self.helpmenu = QMenu(self.menuBar)
+        self.helpmenu = QMenu(self.flowBar)
         self.helpmenu.setObjectName("helpmenu")
-        Builder.setMenuBar(self.menuBar)
-        self.statusBar = QStatusBar(Builder)
-        self.statusBar.setObjectName("statusBar")
-        Builder.setStatusBar(self.statusBar)
+        Builder.setMenuBar(self.flowBar)
+        self.chartStatus = QStatusBar(Builder)
+        self.chartStatus.setObjectName("chartStatus")
+        self.chartStatus.setStyleSheet("QStatusBar{background-color: rgb(0, 96, 132);color:white;}")
+        Builder.setStatusBar(self.chartStatus)
         self.toolBar = QToolBar(Builder)
         self.toolBar.setMinimumSize(QSize(0, 40))
         self.toolBar.setObjectName("toolBar")
         self.toolBar.setIconSize(QSize(40, 40))
-        self.toolBar.setStyleSheet("QToolBar { border: 0px }QToolButton:hover{ background-color: transparent;margin-left:2px;margin-bottom:2px; }QToolButton:pressed{ background-color: transparent; }")
+        self.toolBar.setStyleSheet("QToolBar { border: 0px;}QToolButton::hover {background-color: transparent; margin-left:2px;margin-bottom:2px; };QToolButton:pressed{ background-color: transparent;}")
         Builder.addToolBar(Qt.TopToolBarArea, self.toolBar)
         self.savebut = QAction(Builder)
         icon1 = QIcon()
@@ -113,8 +147,8 @@ class FlowchartMaker(QMainWindow):
         icon5.addPixmap(QPixmap(":/icons/icons/grab.png"),QIcon.Normal, QIcon.Off)
         self.grabpage.setIcon(icon5)
         self.grabpage.setObjectName("grabpage")
-        self.menuBar.addAction(self.filemenu.menuAction())
-        self.menuBar.addAction(self.helpmenu.menuAction())
+        self.flowBar.addAction(self.filemenu.menuAction())
+        self.flowBar.addAction(self.helpmenu.menuAction())
         self.toolBar.addAction(self.savebut)
         self.toolBar.addAction(self.magnifyplus)
         self.toolBar.addAction(self.magnifyminus)
@@ -127,6 +161,8 @@ class FlowchartMaker(QMainWindow):
         self.toolBar.setWindowTitle("toolBar")
         self.savebut.setText(" ")
         self.savebut.setToolTip("Kaydet")
+        self.defhome.setToolTip("Varsayılan moda geç")
+        self.grabpage.setToolTip("Sayfayı Sürükle")
         self.savebut.setShortcut("Ctrl+S")
         self.magnifyplus.setText(" ")
         self.magnifyplus.setToolTip("Yakınlaştır")
@@ -134,6 +170,10 @@ class FlowchartMaker(QMainWindow):
         self.magnifyminus.setText(" ")
         self.magnifyminus.setToolTip("Uzaklaştır")
         self.magnifyminus.setShortcut("Ctrl+-")
+        self.openfile = QAction(Builder)
+        self.openfile.setObjectName("action_o")
+        self.filemenu.addAction(self.openfile)
+        self.openfile.setText("Aç")
         self.exitact = QAction(Builder)
         self.exitact.setObjectName("action_k")
         self.filemenu.addAction(self.exitact)
@@ -151,6 +191,7 @@ class FlowchartMaker(QMainWindow):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.horizontalLayout_2.addWidget(self.tabWidget)
         self.tabWidget.setCurrentIndex(-1)
+        self.file_path = ""
     
     def onLoadFinished(self, ok):
         if ok:
@@ -175,14 +216,14 @@ class FlowchartMaker(QMainWindow):
         self.tabWidget.setCurrentIndex(self.tabWidget.count())
         htmlstart, htmlmid, htmlend = """<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style type="text/css">body{ margin:0px;}.start-element { fill : #d594f4; }.end-element { fill : #00FF55; }.condition-element { fill : #ffa0ea; }.inputoutput-element { fill : #55FFFF; }.operation-element { fill : #FFFF99; }.subroutine-element { fill : #a0e0ff; }.parallel-element { fill : #FFCCFF; }#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style><script src="flowchart.js"></script>""", """<script>window.onload = function () {var code = document.getElementById("code").value,chart;if (chart) {chart.clean();}chart = flowchart.parse(code);chart.drawSVG('canvas', {'x': 20,'y': 20,'roundness': 5,"arrow-end": "diamond",'line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element' },'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'}},'flowstate' : {'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},'future' : { 'fill' : '#FFFF99'},'request' : { 'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }}});};</script></head><body><div><textarea id="code" style="width: 100%;" rows="11">""", "</textarea></div><div id='canvas'></div></body></html>"
         jsfile = open(join(dirname(__file__), "./flowchart.js"),encoding="utf-8").read()
-        file_path = join(dirname(__file__), "./test.py")
-        with open(file_path) as f:
+        with open(self.file_path) as f:
             code = f.read()
         fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
         self.browser = Browser(htmlstart+"<script>\n" +jsfile+"</script>\n"+htmlmid + str(fc) + htmlend)
-        self.statusBar.showMessage("Dosya açıldı", 2000)
+        self.chartStatus.showMessage("Dosya Düzenlendi", 3000)
         self.horizontalLayout_3.addWidget(self.browser)
         self.tabWidget.addTab(self.tab, f"")
+        self.browser.loadFinished.connect(self.onLoadFinished)
 
     def grabcursor(self):
         if(self.tabWidget.currentIndex() >= 0):
@@ -196,23 +237,20 @@ class FlowchartMaker(QMainWindow):
         self.tabWidget.setCurrentIndex(self.tabWidget.count())
         htmlstart, htmlmid, htmlend = """<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style type="text/css">body{ margin:0px;}#canvas { cursor:move; height:100vh;width:100vw;overflow: auto;}::-webkit-scrollbar { width: 0rem;height: 0rem;}#canvas::-webkit-scrollbar { width: 1rem;height: 1rem;}.start-element { fill : #d594f4; }.end-element { fill : #00FF55; }.condition-element { fill : #ffa0ea; }.inputoutput-element { fill : #55FFFF; }.operation-element { fill : #FFFF99; }.subroutine-element { fill : #a0e0ff; }.parallel-element { fill : #FFCCFF; }#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style><script src="flowchart.js"></script>""", """<script>window.onload = function () {var code = document.getElementById("code").value,chart;if (chart) {chart.clean();}chart = flowchart.parse(code);chart.drawSVG('canvas', {'x': 20,'y': 20,'roundness': 5,"arrow-end": "diamond",'line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element' },'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'}},'flowstate' : {'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},'future' : { 'fill' : '#FFFF99'},'request' : { 'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }}});};document.addEventListener("DOMContentLoaded", function () {const ele = document.getElementById("canvas");ele.style.cursor = "move";let pos = { top: 0, left: 0, x: 0, y: 0 };const mouseDownHandler = function (e) {ele.style.cursor = "move";ele.style.userSelect = "none";pos = {left: ele.scrollLeft,top: ele.scrollTop,x: e.clientX,y: e.clientY,};document.addEventListener("mousemove", mouseMoveHandler);document.addEventListener("mouseup", mouseUpHandler);};const mouseMoveHandler = function (e) {const dx = e.clientX - pos.x;const dy = e.clientY - pos.y;ele.scrollTop = pos.top - dy;ele.scrollLeft = pos.left - dx;};const mouseUpHandler = function () {ele.style.cursor = "move";ele.style.removeProperty("user-select");document.removeEventListener("mousemove", mouseMoveHandler);document.removeEventListener("mouseup", mouseUpHandler);};ele.addEventListener("mousedown", mouseDownHandler);});</script></head><body><div><textarea id="code" style="width: 100%;" rows="11">""", "</textarea></div><div id='canvas'></body></html>"
         jsfile = open(join(dirname(__file__), "./flowchart.js"),encoding="utf-8").read()
-        file_path = join(dirname(__file__), "./test.py")
-        with open(file_path) as f:
+        with open(self.file_path) as f:
             code = f.read()
         fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
         self.browser = Browser(htmlstart+"<script>\n" +jsfile+"</script>\n"+htmlmid + str(fc) + htmlend)
         self.horizontalLayout_3.addWidget(self.browser)
         self.tabWidget.addTab(self.tab, f"")
+        self.chartStatus.showMessage("Dosya Düzenlendi", 3000)
 
     def closeTab(self, index):
         self.tabWidget.removeTab(index)
-        self.movie.start()
-        self.movie.setSpeed(250)
-        self.movie.setPaused(False)
+
         QTimer.singleShot(1000, lambda : self.loading.done(0))
         if self.loading.exec_() == QMessageBox.Yes:
             pass
-        self.movie.stop()
 
     def magnifypluser(self):
         self.browser.setZoomFactor(self.browser.zoomFactor() + 0.1)
@@ -246,11 +284,11 @@ class FlowchartMaker(QMainWindow):
                     fullpath += ".pdf"
                 try:
                     self.browser.page().printToPdf(abspath(fullpath), pageLayout=pagelay)
-                    self.statusBar.showMessage(fullpath + " kaydedildi", 3000)
+                    self.chartStatus.showMessage(fullpath + " kaydedildi", 3000)
                 except Exception as e:
-                    self.statusBar.showMessage('Dosya kayıt edilemedi !', 3000)
+                    self.chartStatus.showMessage('Dosya kayıt edilemedi !', 3000)
             else:
-                self.statusBar.showMessage('Dosya kayıt edilemedi !', 3000)
+                self.chartStatus.showMessage('Dosya kayıt edilemedi !', 3000)
         else:
             self.movie.start()
             self.movie.setSpeed(250)
