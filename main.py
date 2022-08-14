@@ -233,10 +233,33 @@ class FlowchartMaker(QMainWindow):
         self.savebut.setEnabled(True)    
 
     def conditionSearch(self,code:str)-> str:
-        code="\n"+code
-        code=code.replace('    ', '||||').replace('\n','<<<<')
-        code=code.replace('<<<<while', "\n''\nwhile").replace('<<<<for', "\n''\nfor").replace('<<<<if', "\n''\nif").replace('<<<<||||||||||||||||',"\n                ''\n                ").replace('<<<<||||||||||||',"\n            ''\n            ").replace('<<<<||||||||',"\n        ''\n        ").replace('<<<<||||',"\n    ''\n    ")
-        code=code.replace('||||', '    ').replace('<<<<', '\n').replace("    ''\n    else","    \n    else").replace("    ''\n    elif","    \n    elif").replace("        ''\n        else","        \n        else").replace("        ''\n        elif","        \n        elif").replace("            ''\n            else","            \n            else").replace("            ''\n            elif","            \n            elif").replace("                ''\n                else","                \n                else").replace("                ''\n    elif","                \n                elif")
+        y,n,q,c0,c1,c2,w,f=';;;;','\n',"''\n",'if','elif','else','while','for'
+        t10,t9,t8,t7,t6,t5,t4,t3,t2,t1='****************************************','************************************','********************************','****************************','************************','********************','****************','************','********','****'
+        x10,x9,x8,x7,x6,x5,x4,x3,x2,x1='                                        ','                                    ','                                ','                            ','                        ','                    ','                ','            ','        ','    '
+        code=n+code
+        code=code.replace(x1, t1).replace(n,y)
+        code=code.replace(y+w, n+q+w).replace(y+f, n+q+f).replace(y+c0, n+q+c0)
+        if(code.count(t10)>0):
+            code=code.replace(y+t10,n+x10+q+x10).replace(x10+q+x10+c2,x10+n+x10+c2).replace(x10+q+x10+c1,x10+n+x10+c1)
+        if(code.count(t9)>0):
+            code=code.replace(y+t9,n+x9+q+x9).replace(x9+q+x9+c2,x9+n+x9+c2).replace(x9+q+x9+c1,x9+n+x9+c1)
+        if(code.count(t8)>0):
+            code=code.replace(y+t8,n+x8+q+x8).replace(x8+q+x8+c2,x8+n+x8+c2).replace(x8+q+x8+c1,x8+n+x8+c1)
+        if(code.count(t7)>0):
+            code=code.replace(y+t7,n+x7+q+x7).replace(x7+q+x7+c2,x7+n+x7+c2).replace(x7+q+x7+c1,x7+n+x7+c1)
+        if(code.count(t6)>0):
+            code=code.replace(y+t6,n+x6+q+x6).replace(x6+q+x6+c2,x6+n+x6+c2).replace(x6+q+x6+c1,x6+n+x6+c1)
+        if(code.count(t5)>0):
+            code=code.replace(y+t5,n+x5+q+x5).replace(x5+q+x5+c2,x5+n+x5+c2).replace(x5+q+x5+c1,x5+n+x5+c1)
+        if(code.count(t4)>0):
+            code=code.replace(y+t4,n+x4+q+x4).replace(x4+q+x4+c2,x4+n+x4+c2).replace(x4+q+x4+c1,x4+n+x4+c1)
+        if(code.count(t3)>0):
+            code=code.replace(y+t3,n+x3+q+x3).replace(x3+q+x3+c2,x3+n+x3+c2).replace(x3+q+x3+c1,x3+n+x3+c1)
+        if(code.count(t2)>0):
+            code=code.replace(y+t2,n+x2+q+x2).replace(x2+q+x2+c2,x2+n+x2+c2).replace(x2+q+x2+c1,x2+n+x2+c1)
+        if(code.count(t1)>0):
+            code=code.replace(y+t1,n+x1+q+x1).replace(x1+q+x1+c2,x1+n+x1+c2).replace(x1+q+x1+c1,x1+n+x1+c1)
+        code=code.replace(t1, x1).replace(y, n)
         fc=Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''","operation: <Koşul>")
         return fc
     def closeTab(self, index):
