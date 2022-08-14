@@ -1,6 +1,6 @@
 from pyflowchart import Flowchart
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel,QLineEdit, QMessageBox,QVBoxLayout
-from PyQt5.QtCore import Qt, QUrl, QMetaObject, QSize, Qt, QRect,QTimer
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel, QLineEdit, QMessageBox, QVBoxLayout
+from PyQt5.QtCore import Qt, QUrl, QMetaObject, QSize, Qt, QRect, QTimer
 from PyQt5.QtGui import QPixmap, QIcon, QFont, QPageSize, QPageLayout, QMovie
 import icons_rc
 from PyQt5 import QtWebEngineWidgets as web
@@ -10,7 +10,9 @@ from platform import system
 from os import environ, makedirs
 from subprocess import check_output
 
-#pyuic5 advance.ui -o advance.py
+# pyuic5 advance.ui -o advance.py
+
+
 class Browser(web.QWebEngineView):
 
     def __init__(self, html=""):
@@ -19,6 +21,7 @@ class Browser(web.QWebEngineView):
         base_path = join(dirname(here), 'dummy').replace('\\', '/')
         self.url = QUrl('file:///' + base_path)
         self.setHtml(html, baseUrl=self.url)
+
 
 class LoadingMessageBox(QMessageBox):
 
@@ -29,12 +32,12 @@ class LoadingMessageBox(QMessageBox):
         label_gif.setMovie(movie)
         label_gif.setAlignment(Qt.AlignCenter)
         label_gif.setGeometry(QRect(18, 0, 205, 20))
-        label_text = QLineEdit("Dosya Düzenleniyor",self)
+        label_text = QLineEdit("Dosya Düzenleniyor", self)
         label_text.setReadOnly(True)
         label_text.setStyleSheet("border:none; background-color:transparent")
         label_text.setGeometry(QRect(18, 110, 185, 25))
         label_text.setAlignment(Qt.AlignCenter)
-        label_text2 = QLineEdit("Lütfen bekleyiniz...",self)
+        label_text2 = QLineEdit("Lütfen bekleyiniz...", self)
         label_text2.setReadOnly(True)
         label_text2.setStyleSheet("border:none; background-color:transparent")
         label_text2.setGeometry(QRect(18, 135, 185, 25))
@@ -42,6 +45,7 @@ class LoadingMessageBox(QMessageBox):
         movie.start()
         movie.setSpeed(250)
         movie.setPaused(False)
+
 
 class FlowchartMaker(QMainWindow):
     pagewidth = 0
@@ -62,9 +66,10 @@ class FlowchartMaker(QMainWindow):
         font.setFamily("Tahoma")
         font.setPointSize(11)
         self.loading.setFont(font)
-        txt="QMessageBox{ opacity: 0;border: 10px solid #acd33b;background-color: #e8f2c6;}QLabel{margin: 10px 10px;font-size: 14px;height: 110px; min-height: 110px; max-height: 110px; width: 155px; min-width: 155px; max-width: 155px;}QPushButton{background-color: #00aaff;color: white;font-size: 14px;padding: 5px 18px 5px 18px;text-align: center;text-decoration: none;display: inline-block;margin: 4px 2px;border-radius: 7px;}QPushButton:hover {background: #58c1e7;}"
+        txt = "QMessageBox{ opacity: 0;border: 10px solid #acd33b;background-color: #e8f2c6;}QLabel{margin: 10px 10px;font-size: 14px;height: 110px; min-height: 110px; max-height: 110px; width: 155px; min-width: 155px; max-width: 155px;}QPushButton{background-color: #00aaff;color: white;font-size: 14px;padding: 5px 18px 5px 18px;text-align: center;text-decoration: none;display: inline-block;margin: 4px 2px;border-radius: 7px;}QPushButton:hover {background: #58c1e7;}"
         self.loading.setStyleSheet(txt)
-        self.loading.setWindowFlags(self.loading.windowFlags() | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
+        self.loading.setWindowFlags(self.loading.windowFlags(
+        ) | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
         self.loading.setStandardButtons(QMessageBox.NoButton)
         self.openfile.triggered.connect(self.openFile)
         self.defhome.setDisabled(True)
@@ -72,18 +77,20 @@ class FlowchartMaker(QMainWindow):
         self.magnifyminus.setDisabled(True)
         self.magnifyplus.setDisabled(True)
         self.savebut.setDisabled(True)
-    
+
     def openFile(self):
-        self.file_path = QFileDialog.getOpenFileName(self, "Dosya Aç", "", "Python Dosyası (*.py)")[0]
+        self.file_path = QFileDialog.getOpenFileName(
+            self, "Dosya Aç", "", "Python Dosyası (*.py)")[0]
         if self.file_path:
             self.htmlOpener("noGrab")
-    
+
     def setupUi(self, Builder):
         Builder.setObjectName("Builder")
         Builder.resize(1066, 572)
         Builder.setMinimumSize(QSize(1050, 570))
         icon = QIcon()
-        icon.addPixmap(QPixmap(":/icons/icons/flowchart.png"),QIcon.Normal, QIcon.Off)
+        icon.addPixmap(QPixmap(":/icons/icons/flowchart.png"),
+                       QIcon.Normal, QIcon.Off)
         Builder.setWindowIcon(icon)
         self.centralwidget = QWidget(Builder)
         self.centralwidget.setMinimumSize(QSize(1050, 570))
@@ -109,37 +116,44 @@ class FlowchartMaker(QMainWindow):
         Builder.setMenuBar(self.flowBar)
         self.chartStatus = QStatusBar(Builder)
         self.chartStatus.setObjectName("chartStatus")
-        self.chartStatus.setStyleSheet("QStatusBar{background-color: rgb(0, 96, 132);color:white;}")
+        self.chartStatus.setStyleSheet(
+            "QStatusBar{background-color: rgb(0, 96, 132);color:white;}")
         Builder.setStatusBar(self.chartStatus)
         self.toolBar = QToolBar(Builder)
         self.toolBar.setMinimumSize(QSize(0, 40))
         self.toolBar.setObjectName("toolBar")
         self.toolBar.setIconSize(QSize(40, 40))
-        self.toolBar.setStyleSheet("QToolBar { border: 0px;}QToolButton::hover {background-color: transparent; margin-left:2px;margin-bottom:2px; };QToolButton:pressed{ background-color: transparent;}")
+        self.toolBar.setStyleSheet(
+            "QToolBar { border: 0px;}QToolButton::hover {background-color: transparent; margin-left:2px;margin-bottom:2px; };QToolButton:pressed{ background-color: transparent;}")
         Builder.addToolBar(Qt.TopToolBarArea, self.toolBar)
         self.savebut = QAction(Builder)
         icon1 = QIcon()
-        icon1.addPixmap(QPixmap(":/icons/icons/save.png"),QIcon.Normal, QIcon.Off)
+        icon1.addPixmap(QPixmap(":/icons/icons/save.png"),
+                        QIcon.Normal, QIcon.Off)
         self.savebut.setIcon(icon1)
         self.savebut.setObjectName("savebut")
         self.magnifyplus = QAction(Builder)
         icon2 = QIcon()
-        icon2.addPixmap(QPixmap(":/icons/icons/yakın.png"),QIcon.Normal, QIcon.Off)
+        icon2.addPixmap(QPixmap(":/icons/icons/yakın.png"),
+                        QIcon.Normal, QIcon.Off)
         self.magnifyplus.setIcon(icon2)
         self.magnifyplus.setObjectName("magnifyplus")
         self.magnifyminus = QAction(Builder)
         icon3 = QIcon()
-        icon3.addPixmap(QPixmap(":/icons/icons/uzak.png"),QIcon.Normal, QIcon.Off)
+        icon3.addPixmap(QPixmap(":/icons/icons/uzak.png"),
+                        QIcon.Normal, QIcon.Off)
         self.magnifyminus.setIcon(icon3)
         self.magnifyminus.setObjectName("magnifyminus")
         self.defhome = QAction(Builder)
         icon4 = QIcon()
-        icon4.addPixmap(QPixmap(":/icons/icons/defhome.png"),QIcon.Normal, QIcon.Off)
+        icon4.addPixmap(QPixmap(":/icons/icons/defhome.png"),
+                        QIcon.Normal, QIcon.Off)
         self.defhome.setIcon(icon4)
         self.defhome.setObjectName("defhome")
         self.grabpage = QAction(Builder)
         icon5 = QIcon()
-        icon5.addPixmap(QPixmap(":/icons/icons/grab.png"),QIcon.Normal, QIcon.Off)
+        icon5.addPixmap(QPixmap(":/icons/icons/grab.png"),
+                        QIcon.Normal, QIcon.Off)
         self.grabpage.setIcon(icon5)
         self.grabpage.setObjectName("grabpage")
         self.flowBar.addAction(self.filemenu.menuAction())
@@ -187,24 +201,28 @@ class FlowchartMaker(QMainWindow):
         self.horizontalLayout_2.addWidget(self.tabWidget)
         self.tabWidget.setCurrentIndex(-1)
         self.file_path = ""
-    
+
     def onLoadFinished(self, ok):
         if ok:
-            self.browser.page().runJavaScript("document.getElementsByTagName('svg')[0]['clientWidth'];", self.ready1)
-            self.browser.page().runJavaScript("document.getElementsByTagName('svg')[0]['clientHeight'];", self.ready2)
+            self.browser.page().runJavaScript(
+                "document.getElementsByTagName('svg')[0]['clientWidth'];", self.ready1)
+            self.browser.page().runJavaScript(
+                "document.getElementsByTagName('svg')[0]['clientHeight'];", self.ready2)
 
     def ready1(self, width):
-        if(FlowchartMaker.pagewidth==0):
+        if(FlowchartMaker.pagewidth == 0):
             FlowchartMaker.pagewidth += width
 
     def ready2(self, height):
-        if(FlowchartMaker.pageheight==0):
+        if(FlowchartMaker.pageheight == 0):
             FlowchartMaker.pageheight += height
 
-
-    def htmlOpener(self,situation):
-        start,grabcss,grabjs,middle,end="""
-        <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style type="text/css">body{ margin:0px;}.start-element { fill : #d594f4; }.end-element { fill : #00FF55; }.condition-element { fill : #ffa0ea; }.inputoutput-element { fill : #55FFFF; }.operation-element { fill : #FFFF99; }.subroutine-element { fill : #a0e0ff; }.parallel-element { fill : #FFCCFF; }#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style>""","""<style>#canvas { cursor:move; height:100vh;width:100vw;overflow: auto;}::-webkit-scrollbar { width: 0rem;height: 0rem;}#canvas::-webkit-scrollbar { width: 1rem;height: 1rem;}</style>""","""<script>document.addEventListener("DOMContentLoaded", function () {const ele = document.getElementById("canvas");ele.style.cursor = "move";let pos = { top: 0, left: 0, x: 0, y: 0 };const mouseDownHandler = function (e) {ele.style.cursor = "move";ele.style.userSelect = "none";pos = {left: ele.scrollLeft,top: ele.scrollTop,x: e.clientX,y: e.clientY,};document.addEventListener("mousemove", mouseMoveHandler);document.addEventListener("mouseup", mouseUpHandler);};const mouseMoveHandler = function (e) {const dx = e.clientX - pos.x;const dy = e.clientY - pos.y;ele.scrollTop = pos.top - dy;ele.scrollLeft = pos.left - dx;};const mouseUpHandler = function () {ele.style.cursor = "move";ele.style.removeProperty("user-select");document.removeEventListener("mousemove", mouseMoveHandler);document.removeEventListener("mouseup", mouseUpHandler);};ele.addEventListener("mousedown", mouseDownHandler);});</script>""","""<script>window.onload = function () {var chart;if (chart) {chart.clean();}chart = flowchart.parse(document.getElementById("code").value);chart.drawSVG('canvas', {'x': 20,'y': 20,'roundness': 5,"arrow-end": "diamond",'line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element' },'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'}},'flowstate' : {'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},'future' : { 'fill' : '#FFFF99'},'request' : { 'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }}});};</script></head><body><div><textarea id="code" style="width: 100%;" rows="11">""","</textarea></div><div id='canvas'></div></body></html>"
+    def htmlOpener(self, situation):
+        QTimer.singleShot(1000, lambda: self.loading.done(0))
+        if self.loading.exec_() == QMessageBox.Yes:
+            pass
+        start, grabcss, grabjs, middle, end = """
+        <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style type="text/css">body{ margin:0px;}.start-element { fill : #d594f4; }.end-element { fill : #00FF55; }.condition-element { fill : #ffa0ea; }.inputoutput-element { fill : #55FFFF; }.operation-element { fill : #FFFF99; }.subroutine-element { fill : #a0e0ff; }.parallel-element { fill : #FFCCFF; }#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style>""", """<style>#canvas { cursor:move; height:100vh;width:100vw;overflow: auto;}::-webkit-scrollbar { width: 0rem;height: 0rem;}#canvas::-webkit-scrollbar { width: 1rem;height: 1rem;}</style>""", """<script>document.addEventListener("DOMContentLoaded", function () {const ele = document.getElementById("canvas");ele.style.cursor = "move";let pos = { top: 0, left: 0, x: 0, y: 0 };const mouseDownHandler = function (e) {ele.style.cursor = "move";ele.style.userSelect = "none";pos = {left: ele.scrollLeft,top: ele.scrollTop,x: e.clientX,y: e.clientY,};document.addEventListener("mousemove", mouseMoveHandler);document.addEventListener("mouseup", mouseUpHandler);};const mouseMoveHandler = function (e) {const dx = e.clientX - pos.x;const dy = e.clientY - pos.y;ele.scrollTop = pos.top - dy;ele.scrollLeft = pos.left - dx;};const mouseUpHandler = function () {ele.style.cursor = "move";ele.style.removeProperty("user-select");document.removeEventListener("mousemove", mouseMoveHandler);document.removeEventListener("mouseup", mouseUpHandler);};ele.addEventListener("mousedown", mouseDownHandler);});</script>""", """<script>window.onload = function () {var chart;if (chart) {chart.clean();}chart = flowchart.parse(document.getElementById("code").value);chart.drawSVG('canvas', {'x': 20,'y': 20,'roundness': 5,"arrow-end": "diamond",'line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element' },'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'}},'flowstate' : {'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},'future' : { 'fill' : '#FFFF99'},'request' : { 'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }}});};</script></head><body><div><textarea id="code" style="width: 100%;" rows="11">""", "</textarea></div><div id='canvas'></div></body></html>"
         if(self.tabWidget.currentIndex() >= 0):
             self.closeTab(self.tabWidget.currentIndex())
         self.tab = QWidget()
@@ -219,9 +237,11 @@ class FlowchartMaker(QMainWindow):
             code = f.read()
         fc = self.conditionSearch(code)
         if(situation == "grab"):
-            self.browser = Browser(start+grabcss+grabjs+"<script>\n" +jsfile+"</script>\n"+middle + str(fc) + end)
+            self.browser = Browser(
+                start+grabcss+grabjs+"<script>\n" + jsfile+"</script>\n"+middle + str(fc) + end)
         if(situation == "noGrab"):
-            self.browser = Browser(start+"<script>\n" +jsfile+"</script>\n"+middle + str(fc) + end)
+            self.browser = Browser(
+                start+"<script>\n" + jsfile+"</script>\n"+middle + str(fc) + end)
         self.chartStatus.showMessage("Dosya Düzenlendi", 3000)
         self.horizontalLayout_3.addWidget(self.browser)
         self.tabWidget.addTab(self.tab, f"")
@@ -230,43 +250,29 @@ class FlowchartMaker(QMainWindow):
         self.grabpage.setEnabled(True)
         self.magnifyminus.setEnabled(True)
         self.magnifyplus.setEnabled(True)
-        self.savebut.setEnabled(True)    
+        self.savebut.setEnabled(True)
 
-    def conditionSearch(self,code:str)-> str:
-        y,n,q,c0,c1,c2,w,f=';;;;','\n',"''\n",'if','elif','else','while','for'
-        t10,t9,t8,t7,t6,t5,t4,t3,t2,t1='****************************************','************************************','********************************','****************************','************************','********************','****************','************','********','****'
-        x10,x9,x8,x7,x6,x5,x4,x3,x2,x1='                                        ','                                    ','                                ','                            ','                        ','                    ','                ','            ','        ','    '
-        code=n+code
-        code=code.replace(x1, t1).replace(n,y)
-        code=code.replace(y+w, n+q+w).replace(y+f, n+q+f).replace(y+c0, n+q+c0)
-        if(code.count(t10)>0):
-            code=code.replace(y+t10,n+x10+q+x10).replace(x10+q+x10+c2,x10+n+x10+c2).replace(x10+q+x10+c1,x10+n+x10+c1)
-        if(code.count(t9)>0):
-            code=code.replace(y+t9,n+x9+q+x9).replace(x9+q+x9+c2,x9+n+x9+c2).replace(x9+q+x9+c1,x9+n+x9+c1)
-        if(code.count(t8)>0):
-            code=code.replace(y+t8,n+x8+q+x8).replace(x8+q+x8+c2,x8+n+x8+c2).replace(x8+q+x8+c1,x8+n+x8+c1)
-        if(code.count(t7)>0):
-            code=code.replace(y+t7,n+x7+q+x7).replace(x7+q+x7+c2,x7+n+x7+c2).replace(x7+q+x7+c1,x7+n+x7+c1)
-        if(code.count(t6)>0):
-            code=code.replace(y+t6,n+x6+q+x6).replace(x6+q+x6+c2,x6+n+x6+c2).replace(x6+q+x6+c1,x6+n+x6+c1)
-        if(code.count(t5)>0):
-            code=code.replace(y+t5,n+x5+q+x5).replace(x5+q+x5+c2,x5+n+x5+c2).replace(x5+q+x5+c1,x5+n+x5+c1)
-        if(code.count(t4)>0):
-            code=code.replace(y+t4,n+x4+q+x4).replace(x4+q+x4+c2,x4+n+x4+c2).replace(x4+q+x4+c1,x4+n+x4+c1)
-        if(code.count(t3)>0):
-            code=code.replace(y+t3,n+x3+q+x3).replace(x3+q+x3+c2,x3+n+x3+c2).replace(x3+q+x3+c1,x3+n+x3+c1)
-        if(code.count(t2)>0):
-            code=code.replace(y+t2,n+x2+q+x2).replace(x2+q+x2+c2,x2+n+x2+c2).replace(x2+q+x2+c1,x2+n+x2+c1)
-        if(code.count(t1)>0):
-            code=code.replace(y+t1,n+x1+q+x1).replace(x1+q+x1+c2,x1+n+x1+c2).replace(x1+q+x1+c1,x1+n+x1+c1)
-        code=code.replace(t1, x1).replace(y, n)
-        fc=Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''","operation: <Koşul>")
+    def conditionSearch(self, code: str) -> str:
+        y, n, q, c0, c1, c2, w, f = ';;;;', '\n', "''\n", 'if', 'elif', 'else', 'while', 'for'
+        Q=[]
+        for i in reversed(range(20)):
+            if(i >= 10):
+                Q.append('****'*(i-9))
+            else:
+                Q.append('    '*(i+1))
+        code = n+code
+        code = code.replace(Q[19], Q[9]).replace(n, y)
+        code = code.replace(y+w, n+q+w).replace(y+f,n+q+f).replace(y+c0, n+q+c0)
+        for i in range(len(Q)-10):
+            if(code.count(Q[i]) > 0):
+                code = code.replace(y+Q[i], n+Q[i+10]+q+Q[i+10]).replace(Q[i+10]+q+Q[i+10]+c2,Q[i+10]+n+Q[i+10]+c2).replace(Q[i+10]+q+Q[i+10]+c1, Q[i+10]+n+Q[i+10]+c1)
+        code = code.replace(Q[9], Q[19]).replace(y, n)
+        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(
+            ' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''", "operation: <Koşul>")
         return fc
+
     def closeTab(self, index):
         self.tabWidget.removeTab(index)
-        QTimer.singleShot(1000, lambda : self.loading.done(0))
-        if self.loading.exec_() == QMessageBox.Yes:
-            pass
 
     def magnifypluser(self):
         self.browser.setZoomFactor(self.browser.zoomFactor() + 0.1)
@@ -287,7 +293,8 @@ class FlowchartMaker(QMainWindow):
                 documents_dir = join(
                     environ['USERPROFILE'] + "/Documents/PynarKutu/")
             elif plt == "Linux":
-                documents_dir = check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip() + "/PynarKutu"
+                documents_dir = check_output(
+                    ["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip() + "/PynarKutu"
             if not exists(documents_dir):
                 makedirs(documents_dir)
             filename = dialog.getSaveFileName(
@@ -295,21 +302,24 @@ class FlowchartMaker(QMainWindow):
             if filename[0]:
                 fullpath = filename[0]
                 pagelay = QPageLayout()
-                pagelay.setPageSize(QPageSize(QSize(FlowchartMaker.pagewidth+100, FlowchartMaker.pageheight+100), "A4"))
+                pagelay.setPageSize(QPageSize(
+                    QSize(FlowchartMaker.pagewidth+100, FlowchartMaker.pageheight+100), "A4"))
                 if(not fullpath.endswith(".pdf")):
                     fullpath += ".pdf"
                 try:
                     self.browser.page().printToPdf(abspath(fullpath), pageLayout=pagelay)
-                    self.chartStatus.showMessage(fullpath + " kaydedildi", 3000)
+                    self.chartStatus.showMessage(
+                        fullpath + " kaydedildi", 3000)
                 except Exception as e:
-                    self.chartStatus.showMessage('Dosya kayıt edilemedi !', 3000)
+                    self.chartStatus.showMessage(
+                        'Dosya kayıt edilemedi !', 3000)
             else:
                 self.chartStatus.showMessage('Dosya kayıt edilemedi !', 3000)
         else:
             self.movie.start()
             self.movie.setSpeed(250)
             self.movie.setPaused(False)
-            QTimer.singleShot(1000, lambda : self.loading.done(0))
+            QTimer.singleShot(1000, lambda: self.loading.done(0))
             if self.loading.exec_() == QMessageBox.Yes:
                 pass
             self.movie.stop()
