@@ -1,7 +1,7 @@
 from pyflowchart import Flowchart
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel, QLineEdit, QMessageBox
 from PyQt5.QtCore import Qt, QUrl, QMetaObject, QSize, Qt, QRect, QTimer
-from PyQt5.QtGui import QPixmap, QIcon, QFont, QPageSize, QPageLayout, QMovie
+from PyQt5.QtGui import QPixmap, QIcon, QPageSize, QPageLayout, QMovie
 import icons_rc
 from PyQt5 import QtWebEngineWidgets as web
 from sys import exit, argv
@@ -53,7 +53,7 @@ class FlowchartMaker(QMainWindow):
         super(FlowchartMaker, self).__init__()
         self.resize(800, 500)
         icon = QIcon()
-        icon.addPixmap(QPixmap(":/icons/icons/flowchart.png"),QIcon.Normal, QIcon.Off)
+        icon.addPixmap(QPixmap(":/icons/icons/flowchart.png"))
         self.setWindowIcon(icon)
         self.mainWid = QWidget(self)
         self.mainWid.setStyleSheet("QTabWidget::pane { background: transparent;color: white;}QTabBar::tab{height: 0px;width: 0px;}QTabWidget::tab-bar:top {top: 0px;}QTabWidget::tab-bar:bottom {bottom: 0px;}QTabWidget::tab-bar:left {right: 0px;}QTabWidget::tab-bar:right {left: 0px;}QTabBar::tab:selected {color: white;background: #394b58;}QTabBar::tab:!selected {background: transparent;color: white;}QTabBar::tab:!selected:hover {background: #6b899f;color: black;}QTabBar::tab:top:last, QTabBar::tab:bottom:last,QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {margin-right: 0;}QTabBar::tab:left:last, QTabBar::tab:right:last,QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {margin-bottom: 0;}QToolBar { border: 0px;}QToolButton::hover {background-color: transparent; margin-left:2px;margin-bottom:2px; };QToolButton:pressed{ background-color: transparent;}")
@@ -78,23 +78,23 @@ class FlowchartMaker(QMainWindow):
         self.addToolBar(self.toolBar)
         self.savebut = QAction(self)
         icon1 = QIcon()
-        icon1.addPixmap(QPixmap(":/icons/icons/save.png"),QIcon.Normal, QIcon.Off)
+        icon1.addPixmap(QPixmap(":/icons/icons/save.png"))
         self.savebut.setIcon(icon1)
         self.magnifyplus = QAction(self)
         icon2 = QIcon()
-        icon2.addPixmap(QPixmap(":/icons/icons/yakın.png"),QIcon.Normal, QIcon.Off)
+        icon2.addPixmap(QPixmap(":/icons/icons/yakın.png"))
         self.magnifyplus.setIcon(icon2)
         self.magnifyminus = QAction(self)
         icon3 = QIcon()
-        icon3.addPixmap(QPixmap(":/icons/icons/uzak.png"),QIcon.Normal, QIcon.Off)
+        icon3.addPixmap(QPixmap(":/icons/icons/uzak.png"))
         self.magnifyminus.setIcon(icon3)
         self.defhome = QAction(self)
         icon4 = QIcon()
-        icon4.addPixmap(QPixmap(":/icons/icons/defhome.png"),QIcon.Normal, QIcon.Off)
+        icon4.addPixmap(QPixmap(":/icons/icons/defhome.png"))
         self.defhome.setIcon(icon4)
         self.grabpage = QAction(self)
         icon5 = QIcon()
-        icon5.addPixmap(QPixmap(":/icons/icons/grab.png"),QIcon.Normal, QIcon.Off)
+        icon5.addPixmap(QPixmap(":/icons/icons/grab.png"))
         self.grabpage.setIcon(icon5)
         self.flowBar.addAction(self.filemenu.menuAction())
         self.flowBar.addAction(self.helpmenu.menuAction())
@@ -210,7 +210,7 @@ class FlowchartMaker(QMainWindow):
             if(code.count(Q[i]) > 0):
                 code = code.replace(y+Q[i], n+Q[i+10]+q+Q[i+10]).replace(Q[i+10]+q+Q[i+10]+c2,Q[i+10]+n+Q[i+10]+c2).replace(Q[i+10]+q+Q[i+10]+c1, Q[i+10]+n+Q[i+10]+c1)
         code = code.replace(Q[9], Q[19]).replace(y, n)
-        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''", "operation: <Koşul>")
+        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''", "operation: ㅤ")
         return fc
 
     def closeTab(self, index):
