@@ -56,7 +56,7 @@ class FlowchartMaker(QMainWindow):
         self.magnifyminus.triggered.connect(self.magnifyminuser)
         self.exitact.triggered.connect(self.close)
         self.defhome.triggered.connect(self.defhomepage)
-        self.grabpage.triggered.connect(self.grabcursor)
+        self.grabpage.triggered.connect(lambda: self.htmlOpener("grab"))
         self.loading = LoadingMessageBox()
         font = QFont()
         font.setFamily("Tahoma")
@@ -76,12 +76,7 @@ class FlowchartMaker(QMainWindow):
     def openFile(self):
         self.file_path = QFileDialog.getOpenFileName(self, "Dosya Aç", "", "Python Dosyası (*.py)")[0]
         if self.file_path:
-            self.openTab()
-            self.defhome.setEnabled(True)
-            self.grabpage.setEnabled(True)
-            self.magnifyminus.setEnabled(True)
-            self.magnifyplus.setEnabled(True)
-            self.savebut.setEnabled(True)
+            self.htmlOpener("noGrab")
     
     def setupUi(self, Builder):
         Builder.setObjectName("Builder")
@@ -199,12 +194,17 @@ class FlowchartMaker(QMainWindow):
             self.browser.page().runJavaScript("document.getElementsByTagName('svg')[0]['clientHeight'];", self.ready2)
 
     def ready1(self, width):
-        FlowchartMaker.pagewidth += width
+        if(FlowchartMaker.pagewidth==0):
+            FlowchartMaker.pagewidth += width
 
     def ready2(self, height):
-        FlowchartMaker.pageheight += height
+        if(FlowchartMaker.pageheight==0):
+            FlowchartMaker.pageheight += height
 
-    def openTab(self):
+
+    def htmlOpener(self,situation):
+        start,grabcss,grabjs,middle,end="""
+        <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style type="text/css">body{ margin:0px;}.start-element { fill : #d594f4; }.end-element { fill : #00FF55; }.condition-element { fill : #ffa0ea; }.inputoutput-element { fill : #55FFFF; }.operation-element { fill : #FFFF99; }.subroutine-element { fill : #a0e0ff; }.parallel-element { fill : #FFCCFF; }#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style>""","""<style>#canvas { cursor:move; height:100vh;width:100vw;overflow: auto;}::-webkit-scrollbar { width: 0rem;height: 0rem;}#canvas::-webkit-scrollbar { width: 1rem;height: 1rem;}</style>""","""<script>document.addEventListener("DOMContentLoaded", function () {const ele = document.getElementById("canvas");ele.style.cursor = "move";let pos = { top: 0, left: 0, x: 0, y: 0 };const mouseDownHandler = function (e) {ele.style.cursor = "move";ele.style.userSelect = "none";pos = {left: ele.scrollLeft,top: ele.scrollTop,x: e.clientX,y: e.clientY,};document.addEventListener("mousemove", mouseMoveHandler);document.addEventListener("mouseup", mouseUpHandler);};const mouseMoveHandler = function (e) {const dx = e.clientX - pos.x;const dy = e.clientY - pos.y;ele.scrollTop = pos.top - dy;ele.scrollLeft = pos.left - dx;};const mouseUpHandler = function () {ele.style.cursor = "move";ele.style.removeProperty("user-select");document.removeEventListener("mousemove", mouseMoveHandler);document.removeEventListener("mouseup", mouseUpHandler);};ele.addEventListener("mousedown", mouseDownHandler);});</script>""","""<script>window.onload = function () {var chart;if (chart) {chart.clean();}chart = flowchart.parse(document.getElementById("code").value);chart.drawSVG('canvas', {'x': 20,'y': 20,'roundness': 5,"arrow-end": "diamond",'line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element' },'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'}},'flowstate' : {'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},'future' : { 'fill' : '#FFFF99'},'request' : { 'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }}});};</script></head><body><div><textarea id="code" style="width: 100%;" rows="11">""","</textarea></div><div id='canvas'></div></body></html>"
         if(self.tabWidget.currentIndex() >= 0):
             self.closeTab(self.tabWidget.currentIndex())
         self.tab = QWidget()
@@ -214,40 +214,33 @@ class FlowchartMaker(QMainWindow):
         self.horizontalLayout_3.setSpacing(0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.tabWidget.setCurrentIndex(self.tabWidget.count())
-        htmlstart, htmlmid, htmlend = """<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style type="text/css">body{ margin:0px;}.start-element { fill : #d594f4; }.end-element { fill : #00FF55; }.condition-element { fill : #ffa0ea; }.inputoutput-element { fill : #55FFFF; }.operation-element { fill : #FFFF99; }.subroutine-element { fill : #a0e0ff; }.parallel-element { fill : #FFCCFF; }#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style><script src="flowchart.js"></script>""", """<script>window.onload = function () {var code = document.getElementById("code").value,chart;if (chart) {chart.clean();}chart = flowchart.parse(code);chart.drawSVG('canvas', {'x': 20,'y': 20,'roundness': 5,"arrow-end": "diamond",'line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element' },'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'}},'flowstate' : {'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},'future' : { 'fill' : '#FFFF99'},'request' : { 'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }}});};</script></head><body><div><textarea id="code" style="width: 100%;" rows="11">""", "</textarea></div><div id='canvas'></div></body></html>"
         jsfile = open(join(dirname(__file__), "./flowchart.js"),encoding="utf-8").read()
         with open(self.file_path) as f:
             code = f.read()
-        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
-        self.browser = Browser(htmlstart+"<script>\n" +jsfile+"</script>\n"+htmlmid + str(fc) + htmlend)
+        fc = self.conditionSearch(code)
+        if(situation == "grab"):
+            self.browser = Browser(start+grabcss+grabjs+"<script>\n" +jsfile+"</script>\n"+middle + str(fc) + end)
+        if(situation == "noGrab"):
+            self.browser = Browser(start+"<script>\n" +jsfile+"</script>\n"+middle + str(fc) + end)
         self.chartStatus.showMessage("Dosya Düzenlendi", 3000)
         self.horizontalLayout_3.addWidget(self.browser)
         self.tabWidget.addTab(self.tab, f"")
         self.browser.loadFinished.connect(self.onLoadFinished)
+        self.defhome.setEnabled(True)
+        self.grabpage.setEnabled(True)
+        self.magnifyminus.setEnabled(True)
+        self.magnifyplus.setEnabled(True)
+        self.savebut.setEnabled(True)    
 
-    def grabcursor(self):
-        if(self.tabWidget.currentIndex() >= 0):
-            self.closeTab(self.tabWidget.currentIndex())
-        self.tab = QWidget()
-        self.tab.setObjectName(f"{self.tabWidget.count()}")
-        self.horizontalLayout_3 = QHBoxLayout(self.tab)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setSpacing(0)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.tabWidget.setCurrentIndex(self.tabWidget.count())
-        htmlstart, htmlmid, htmlend = """<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style type="text/css">body{ margin:0px;}#canvas { cursor:move; height:100vh;width:100vw;overflow: auto;}::-webkit-scrollbar { width: 0rem;height: 0rem;}#canvas::-webkit-scrollbar { width: 1rem;height: 1rem;}.start-element { fill : #d594f4; }.end-element { fill : #00FF55; }.condition-element { fill : #ffa0ea; }.inputoutput-element { fill : #55FFFF; }.operation-element { fill : #FFFF99; }.subroutine-element { fill : #a0e0ff; }.parallel-element { fill : #FFCCFF; }#code{display: none;}::-webkit-scrollbar {display:block;}::-webkit-scrollbar-thumb {border:1px solid #60a0e0;background: #c0e0ff;}::-webkit-scrollbar-thumb:hover {background: #00ffff;}</style><script src="flowchart.js"></script>""", """<script>window.onload = function () {var code = document.getElementById("code").value,chart;if (chart) {chart.clean();}chart = flowchart.parse(code);chart.drawSVG('canvas', {'x': 20,'y': 20,'roundness': 5,"arrow-end": "diamond",'line-width': 1,'maxWidth': 80,'line-length': 40,'text-margin': 15,'font-size': 11,'font': 'normal','font-family': 'Arial','font-weight': 'normal','font-color': 'black','line-color': 'black','element-color': 'black','fill': 'white','yes-text': 'Doğru','no-text': 'Yanlış','scale': 1,'symbols': {'start': {'font-color': 'black','element-color': 'green','class': 'start-element' },'end':{'class': 'end-element'},'condition': {'class': 'condition-element'},'inputoutput': {'class': 'inputoutput-element'},'operation': {'class': 'operation-element'},'subroutine': {'class': 'subroutine-element'},'parallel': {'class': 'parallel-element'}},'flowstate' : {'past' : { 'fill' : '#CCCCCC', 'font-size' : 12},'current' : {'fill' : 'yellow', 'font-color' : 'red', 'font-weight' : 'bold'},'future' : { 'fill' : '#FFFF99'},'request' : { 'fill' : 'blue'},'invalid': {'fill' : '#444444'},'approved' : { 'fill' : '#58C4A3', 'font-size' : 12, 'yes-text' : 'APPROVED', 'no-text' : 'n/a' },'rejected' : { 'fill' : '#C45879', 'font-size' : 12, 'yes-text' : 'n/a', 'no-text' : 'REJECTED' }}});};document.addEventListener("DOMContentLoaded", function () {const ele = document.getElementById("canvas");ele.style.cursor = "move";let pos = { top: 0, left: 0, x: 0, y: 0 };const mouseDownHandler = function (e) {ele.style.cursor = "move";ele.style.userSelect = "none";pos = {left: ele.scrollLeft,top: ele.scrollTop,x: e.clientX,y: e.clientY,};document.addEventListener("mousemove", mouseMoveHandler);document.addEventListener("mouseup", mouseUpHandler);};const mouseMoveHandler = function (e) {const dx = e.clientX - pos.x;const dy = e.clientY - pos.y;ele.scrollTop = pos.top - dy;ele.scrollLeft = pos.left - dx;};const mouseUpHandler = function () {ele.style.cursor = "move";ele.style.removeProperty("user-select");document.removeEventListener("mousemove", mouseMoveHandler);document.removeEventListener("mouseup", mouseUpHandler);};ele.addEventListener("mousedown", mouseDownHandler);});</script></head><body><div><textarea id="code" style="width: 100%;" rows="11">""", "</textarea></div><div id='canvas'></body></html>"
-        jsfile = open(join(dirname(__file__), "./flowchart.js"),encoding="utf-8").read()
-        with open(self.file_path) as f:
-            code = f.read()
-        fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ')
-        self.browser = Browser(htmlstart+"<script>\n" +jsfile+"</script>\n"+htmlmid + str(fc) + htmlend)
-        self.horizontalLayout_3.addWidget(self.browser)
-        self.tabWidget.addTab(self.tab, f"")
-        self.chartStatus.showMessage("Dosya Düzenlendi", 3000)
-
+    def conditionSearch(self,code:str)-> str:
+        code="\n"+code
+        code=code.replace('    ', '||||').replace('\n','<<<<')
+        code=code.replace('<<<<while', "\n''\nwhile").replace('<<<<for', "\n''\nfor").replace('<<<<if', "\n''\nif").replace('<<<<||||||||||||||||',"\n                ''\n                ").replace('<<<<||||||||||||',"\n            ''\n            ").replace('<<<<||||||||',"\n        ''\n        ").replace('<<<<||||',"\n    ''\n    ")
+        code=code.replace('||||', '    ').replace('<<<<', '\n').replace("    ''\n    else","    \n    else").replace("    ''\n    elif","    \n    elif").replace("        ''\n        else","        \n        else").replace("        ''\n        elif","        \n        elif").replace("            ''\n            else","            \n            else").replace("            ''\n            elif","            \n            elif").replace("                ''\n                else","                \n                else").replace("                ''\n    elif","                \n                elif")
+        fc=Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''","operation: <Koşul>")
+        return fc
     def closeTab(self, index):
         self.tabWidget.removeTab(index)
-
         QTimer.singleShot(1000, lambda : self.loading.done(0))
         if self.loading.exec_() == QMessageBox.Yes:
             pass
@@ -260,7 +253,7 @@ class FlowchartMaker(QMainWindow):
 
     def defhomepage(self):
         self.browser.setZoomFactor(1.0)
-        self.openTab()
+        self.htmlOpener("noGrab")
 
     def saveFile(self):
         if(FlowchartMaker.pagewidth != 0 and FlowchartMaker.pageheight != 0):
