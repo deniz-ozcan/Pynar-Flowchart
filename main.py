@@ -11,7 +11,6 @@ from os import environ, makedirs
 from subprocess import check_output
 from re import sub, finditer
 from autopep8 import fix_code
-
 class LoadingMessageBox(QMessageBox):
 
     def __init__(self, parent=None):
@@ -150,15 +149,12 @@ class FlowchartMaker(QMainWindow):
         self.tabWidget.setCurrentIndex(self.tabWidget.count())
         jsfile = "<script>\n" + open(join(dirname(__file__), "./flowchart.js"),encoding="utf-8").read() + "</script>\n"
         fc = self.conditionSearch(open(self.file_path, encoding="utf-8").read())
-        if fc != "":
-            if(situation == "grab"):
-                self.browser = Web()
-                self.browser.setHtml(start+grabcss+grabjs +jsfile+middle+fc+end, baseUrl=QUrl("file://"))
-            if(situation == "noGrab"):
-                self.browser = Web()
-                self.browser.setHtml(start+jsfile + middle +fc+end, baseUrl=QUrl("file://"))
-        else:
-            self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
+        if(situation == "grab"):
+            self.browser = Web()
+            self.browser.setHtml(start+grabcss+grabjs +jsfile+middle+fc+end, baseUrl=QUrl("file://"))
+        if(situation == "noGrab"):
+            self.browser = Web()
+            self.browser.setHtml(start+jsfile + middle +fc+end, baseUrl=QUrl("file://"))
         self.chartStatus.showMessage("Akış Şeması Düzenlendi.", 3000)
         self.horLay_3.addWidget(self.browser)
         self.tabWidget.addTab(self.tab, f"")
@@ -170,11 +166,11 @@ class FlowchartMaker(QMainWindow):
         self.savebut.setEnabled(True)
 
     def conditionSearch(self, code: str) -> str:
+        code=fix_code(code,options={'max_line_length': 200})
         Q = ['€€€€'*(x-9) if x >= 10 else '    '*(x+1) for x in reversed(range(20))]
         y, n, q, c0, c1, c2, tr, ex, w, f = '₺₺₺₺', '\n', "''\n", 'if', 'elif', 'else', 'try', 'except', 'while', 'for'
-        b1, b2, b3, b4, b5, b6 = [i.start() for i in finditer('{', code)], [i.start() for i in finditer('}', code)], [i.start() for i in finditer('\[', code)], [i.start() for i in finditer('\]', code)], [i.start() for i in finditer('\(', code)], [i.start() for i in finditer('\)', code)]
-        code=fix_code(code,options={'max_line_length': 200})
         code = sub('#.*', '', code)
+        b1, b2, b3, b4, b5, b6 = [i.start() for i in finditer('{', code)], [i.start() for i in finditer('}', code)], [i.start() for i in finditer('\[', code)], [i.start() for i in finditer('\]', code)], [i.start() for i in finditer('\(', code)], [i.start() for i in finditer('\)', code)]
         code = list(code)
         prob=0
         if len(b1) == len(b2) and b1 != 0 and b2 != 0:
@@ -214,10 +210,12 @@ class FlowchartMaker(QMainWindow):
         code = code.replace(Q[9], Q[19]).replace(y, n)
         fc = ''
         try:
+            print(code)
             fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''", "operation: ㅤ")
+            print(fc)
+            return fc
         except:
             self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
-        return fc
 
     def saveFile(self):
         if(FlowchartMaker.pagewidth != 0 and FlowchartMaker.pageheight != 0):
@@ -225,9 +223,11 @@ class FlowchartMaker(QMainWindow):
             dialog.setViewMode(QFileDialog.List)
             plt = system()
             if plt == "Windows":
-                documents_dir = join(environ['USERPROFILE']+"/Documents/PynarKutu/")
+                documents_dir = join(
+                    environ['USERPROFILE']+"/Documents/PynarKutu/")
             elif plt == "Linux":
-                documents_dir = check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip()+"/PynarKutu"
+                documents_dir = check_output(
+                    ["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip()+"/PynarKutu"
             if not exists(documents_dir):
                 makedirs(documents_dir)
             filename = dialog.getSaveFileName(
@@ -249,7 +249,8 @@ class FlowchartMaker(QMainWindow):
                 except Exception as e:
                     self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
             else:
-                self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
+                self.chartStatus.showMessage(
+                    'Akış Şeması kayıt edilemedi !', 3000)
         else:
             self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
 
