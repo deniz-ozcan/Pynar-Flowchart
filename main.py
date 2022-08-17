@@ -9,7 +9,7 @@ from os.path import dirname,join,abspath,exists
 from platform import system
 from os import environ,makedirs
 from subprocess import check_output
-
+from re import sub,finditer
 
 class LoadingMessageBox(QMessageBox):
 
@@ -166,13 +166,23 @@ class FlowchartMaker(QMainWindow):
         self.savebut.setEnabled(True)
 
     def conditionSearch(self,code: str) -> str:
-        y,n,q,c0,c1,c2,w,f = '₺₺₺₺','\n',"''\n",'if','elif','else','while','for'
-        Q=[]
-        for i in reversed(range(20)):
-            if(i >= 10):
-                Q.append('€€€€'*(i-9))
-            else:
-                Q.append('    '*(i+1))
+        Q, y, n, q, c0, c1, c2, w, f = ['€€€€'*(x-9) if x >= 10 else '    '*(x+1) for x in reversed(range(20))], '₺₺₺₺', '\n', "''\n", 'if', 'elif', 'else', 'while', 'for'
+        code = sub('#.*', '', code)
+        b1,b2,b3,b4,b5,b6=[i.start() for i in finditer('{', code)],[i.start() for i in finditer('}', code)],[i.start() for i in finditer('\[', code)],[i.start() for i in finditer('\]', code)],[i.start() for i in finditer('\(', code)],[i.start() for i in finditer('\)', code)]
+        code = list(code)
+        for i in range(0,len(b2)):
+            for j in range(b1[i],b2[i]):
+                if(code[j]==' ' or code[j]=='\n'):
+                    code[j]=''
+        for i in range(0,len(b4)):
+            for j in range(b3[i],b4[i]):
+                if(code[j]==' ' or code[j]=='\n'):
+                    code[j]=''
+        for i in range(0,len(b6)):
+            for j in range(b5[i],b6[i]):
+                if(code[j]==' ' or code[j]=='\n'):
+                    code[j]=''
+        code = ''.join(code)
         code = (n+code).replace(Q[19],Q[9]).replace(n,y).replace(y+w,n+q+w).replace(y+f,n+q+f).replace(y+c0,n+q+c0)
         for i in range(len(Q)-10):
             if(code.count(Q[i]) > 0):
