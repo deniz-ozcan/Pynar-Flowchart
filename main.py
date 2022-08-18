@@ -62,12 +62,11 @@ class FlowchartMaker(QMainWindow):
         self.exitact = QAction("Çıkış")
         self.tabWidget = QTabWidget(self.view)
         self.horLay_2 = QHBoxLayout(self.view)
-        self.resize(800, 500)
         self.setWindowIcon(QIcon(QPixmap(":/icons/icons/flowchart.png")))
         self.setCentralWidget(self.mainWid)
         self.setMenuBar(self.flowBar)
         self.setStatusBar(self.chartStatus)
-        self.addToolBar(self.toolBar)
+        self.addToolBar(Qt.TopToolBarArea,self.toolBar)
         self.setWindowTitle("Pynar Flowchart")
         self.horLay.addWidget(self.view)
         self.horLay.setContentsMargins(0, 0, 0, 0)
@@ -79,13 +78,13 @@ class FlowchartMaker(QMainWindow):
         self.flowBar.addAction(self.filemenu.menuAction())
         self.flowBar.addAction(self.helpmenu.menuAction())
         self.flowBar.setGeometry(QRect(0, 0, 1066, 22))
-        self.toolBar.setMinimumSize(QSize(0, 40))
         self.toolBar.setIconSize(QSize(40, 40))
         self.toolBar.addAction(self.savebut)
         self.toolBar.addAction(self.magnifyplus)
         self.toolBar.addAction(self.magnifyminus)
         self.toolBar.addAction(self.defhome)
         self.toolBar.addAction(self.grabpage)
+        self.toolBar.setStyleSheet("QToolBar{ background: #394b58;border:none;spacing:4px;}QToolButton{min-width:45px;min-height:45px;}QToolButton::hover {background: #6b899f; margin-left:2px;margin-bottom:2px;};QToolButton:pressed{background-color: transparent;}")
         self.toolBar.setMovable(False)
         self.filemenu.addAction(self.openfile)
         self.filemenu.addAction(self.exitact)
@@ -113,9 +112,9 @@ class FlowchartMaker(QMainWindow):
         self.magnifyminus.setDisabled(True)
         self.magnifyplus.setDisabled(True)
         self.savebut.setDisabled(True)
-        self.mainWid.setStyleSheet("QTabWidget::pane { background: transparent;color: white;}QTabBar::tab{height: 0px;width: 0px;}QTabWidget::tab-bar:top {top: 0px;}QTabWidget::tab-bar:bottom {bottom: 0px;}QTabWidget::tab-bar:left {right: 0px;}QTabWidget::tab-bar:right {left: 0px;}QTabBar::tab:selected {color: white;background: #394b58;}QTabBar::tab:!selected {background: transparent;color: white;}QTabBar::tab:!selected:hover {background: #6b899f;color: black;}QTabBar::tab:top:last,QTabBar::tab:bottom:last,QTabBar::tab:top:only-one,QTabBar::tab:bottom:only-one {margin-right: 0;}QTabBar::tab:left:last,QTabBar::tab:right:last,QTabBar::tab:left:only-one,QTabBar::tab:right:only-one {margin-bottom: 0;}QToolBar {border: 0px;}QToolButton::hover {background-color: transparent; margin-left:2px;margin-bottom:2px;};QToolButton:pressed{background-color: transparent;}")
+        self.mainWid.setStyleSheet("QTabWidget::pane { background: transparent;color: white;}QTabBar::tab{height: 0px;width: 0px;}QTabWidget::tab-bar:top {top: 0px;}QTabWidget::tab-bar:bottom {bottom: 0px;}QTabWidget::tab-bar:left {right: 0px;}QTabWidget::tab-bar:right {left: 0px;}QTabBar::tab:selected {color: white;background: #394b58;}QTabBar::tab:!selected {background: transparent;color: white;}QTabBar::tab:!selected:hover {background: #6b899f;color: black;}QTabBar::tab:top:last,QTabBar::tab:bottom:last,QTabBar::tab:top:only-one,QTabBar::tab:bottom:only-one {margin-right: 0;}QTabBar::tab:left:last,QTabBar::tab:right:last,QTabBar::tab:left:only-one,QTabBar::tab:right:only-one {margin-bottom: 0;}")
         self.chartStatus.setStyleSheet("QStatusBar{background-color: rgb(0,96,132);color:white;}")
-
+        self.toolBar.setMinimumHeight(60)
     def openFile(self):
         self.file_path = QFileDialog.getOpenFileName(self, "Dosya Aç", "", "Python Dosyası (*.py)")[0]
         if self.file_path:
@@ -210,9 +209,7 @@ class FlowchartMaker(QMainWindow):
         code = code.replace(Q[9], Q[19]).replace(y, n)
         fc = ''
         try:
-            print(code)
             fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''", "operation: ㅤ")
-            print(fc)
             return fc
         except:
             self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
@@ -223,15 +220,12 @@ class FlowchartMaker(QMainWindow):
             dialog.setViewMode(QFileDialog.List)
             plt = system()
             if plt == "Windows":
-                documents_dir = join(
-                    environ['USERPROFILE']+"/Documents/PynarKutu/")
+                documents_dir = join(environ['USERPROFILE']+"/Documents/PynarKutu/")
             elif plt == "Linux":
-                documents_dir = check_output(
-                    ["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip()+"/PynarKutu"
+                documents_dir = check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip()+"/PynarKutu"
             if not exists(documents_dir):
                 makedirs(documents_dir)
-            filename = dialog.getSaveFileName(
-                self, "Kaydet", documents_dir, "Flowchart Pdf (*.pdf)")
+            filename = dialog.getSaveFileName(self, "Kaydet", documents_dir, "Flowchart Pdf (*.pdf)")
             if filename[0]:
                 fullpath = filename[0]
                 pagelay = QPageLayout()
@@ -239,8 +233,7 @@ class FlowchartMaker(QMainWindow):
                     pagelay.setOrientation(QPageLayout.Orientation.Landscape)
                 else:
                     pagelay.setOrientation(QPageLayout.Orientation.Portrait)
-                pagelay.setPageSize(
-                    QPageSize(QSize(FlowchartMaker.pagewidth, FlowchartMaker.pageheight), "A4"))
+                pagelay.setPageSize(QPageSize(QSize(FlowchartMaker.pagewidth, FlowchartMaker.pageheight), "A4"))
                 if(not fullpath.endswith(".pdf")):
                     fullpath += ".pdf"
                 try:
