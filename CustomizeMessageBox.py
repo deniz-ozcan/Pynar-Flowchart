@@ -18,21 +18,19 @@ def CustomizeMessageBox_Yes_No(message, clickAccept=None, clickCancel=None, yes=
         icontype = "information"
     if(icon == QMessageBox.Warning):
         icontype = "warning"
-    msgBox.setText(
-        f"<table cellpadding='2'><tr valign='middle'><td ><img src=':icon/images/{icontype}.png'/></td><td>{message}</td></tr></table>")
+    msgBox.setText(f"<table cellpadding='2'><tr valign='middle'><td ><img src=':icon/images/{icontype}.png'/></td><td>{message}</td></tr></table>")
     msgBox.setWindowFlags(msgBox.windowFlags() |Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
     msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
     font = QFont()
     font.setFamily(c.getEditorFont())
     font.setPointSize(c.getEditorFontSize())
     msgBox.setFont(font)
-    borderstyle = "QMessageBox{\nborder-top: 8px solid #ffcc00;\n"
+    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ffcc00;\n"
     if icontype == "critical":
-        borderstyle = "QMessageBox{\nborder-top: 8px solid #ff0000;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ff0000;\n"
     if icontype == "information" or icon == "question":
-        borderstyle = "QMessageBox{\nborder-top: 8px solid #00ccff;\n"
-    msgBox.setStyleSheet(
-        borderstyle + open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #00ccff;\n"
+    msgBox.setStyleSheet(borderstyle + open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
     BtnOk = msgBox.button(QMessageBox.Ok)
     BtnOk.setText(yes)
     BtnCancel = msgBox.button(QMessageBox.Cancel)
@@ -56,8 +54,7 @@ def CustomizeMessageBox_Ok(message, icon=QMessageBox.Question):
         icontype = "information"
     if(icon == QMessageBox.Warning):
         icontype = "warning"
-    msgBox.setText(
-        f"<table cellpadding='2'><tr valign='middle'><td ><img src=':icon/images/{icontype}.png'/></td><td>{message}</td></tr></table>")
+    msgBox.setText(f"<table cellpadding='2'><tr valign='middle'><td ><img src=':icon/images/{icontype}.png'/></td><td>{message}</td></tr></table>")
     msgBox.setWindowTitle('Pynar Mesaj Kutusu')
     msgBox.setWindowIcon(QIcon(':/icon/images/headerLogo1.png'))
     msgBox.setWindowFlags(msgBox.windowFlags() |Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
@@ -66,11 +63,11 @@ def CustomizeMessageBox_Ok(message, icon=QMessageBox.Question):
     font.setFamily(c.getEditorFont())
     font.setPointSize(c.getEditorFontSize())
     msgBox.setFont(font)
-    borderstyle = "QMessageBox{\nborder-top: 8px solid #ffcc00;\n"
+    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ffcc00;\n"
     if icontype == "critical":
-        borderstyle = "QMessageBox{\nborder-top: 8px solid #ff0000;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ff0000;\n"
     if icontype == "information" or icon == "question":
-        borderstyle = "QMessageBox{\nborder-top: 8px solid #00ccff;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #00ccff;\n"
     msgBox.setStyleSheet(borderstyle + open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
     BtnOk = msgBox.button(QMessageBox.Ok)
     BtnOk.setText('Tamam')
@@ -91,20 +88,18 @@ def CustomizeMessageBox_Yes_No_Cancel(message, icon=QMessageBox.Question):
         icontype = "information"
     if(icon == QMessageBox.Warning):
         icontype = "warning"
-    msgBox.setText(
-        f"<table cellpadding='2'><tr valign='middle'><td ><img src=':icon/images/{icontype}.png'/></td><td>{message}</td></tr></table>")
+    msgBox.setText(f"<table cellpadding='2'><tr valign='middle'><td ><img src=':icon/images/{icontype}.png'/></td><td>{message}</td></tr></table>")
     msgBox.setWindowFlags(msgBox.windowFlags() |Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
-    msgBox.setStandardButtons(
-        QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+    msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
     font = QFont()
     font.setFamily(c.getEditorFont())
     font.setPointSize(c.getEditorFontSize())
     msgBox.setFont(font)
-    borderstyle = "QMessageBox{\nborder-top: 8px solid #ffcc00;\n"
+    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ffcc00;\n"
     if icontype == "critical":
-        borderstyle = "QMessageBox{\nborder-top: 8px solid #ff0000;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ff0000;\n"
     if icontype == "information" or icon == "question":
-        borderstyle = "QMessageBox{\nborder-top: 8px solid #00ccff;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #00ccff;\n"
     msgBox.setStyleSheet(
         borderstyle + open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
     msgBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
