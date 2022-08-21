@@ -25,11 +25,11 @@ def CustomizeMessageBox_Yes_No(message, clickAccept=None, clickCancel=None, yes=
     font.setFamily(c.getEditorFont())
     font.setPointSize(c.getEditorFontSize())
     msgBox.setFont(font)
-    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ffcc00;\n"
+    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #ffcc00;\n"
     if icontype == "critical":
-        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ff0000;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #ff0000;\n"
     if icontype == "information" or icon == "question":
-        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #00ccff;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #00ccff;\n"
     msgBox.setStyleSheet(borderstyle + open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
     BtnOk = msgBox.button(QMessageBox.Ok)
     BtnOk.setText(yes)
@@ -63,11 +63,11 @@ def CustomizeMessageBox_Ok(message, icon=QMessageBox.Question):
     font.setFamily(c.getEditorFont())
     font.setPointSize(c.getEditorFontSize())
     msgBox.setFont(font)
-    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ffcc00;\n"
+    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #ffcc00;\n"
     if icontype == "critical":
-        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ff0000;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #ff0000;\n"
     if icontype == "information" or icon == "question":
-        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #00ccff;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #00ccff;\n"
     msgBox.setStyleSheet(borderstyle + open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
     BtnOk = msgBox.button(QMessageBox.Ok)
     BtnOk.setText('Tamam')
@@ -95,11 +95,11 @@ def CustomizeMessageBox_Yes_No_Cancel(message, icon=QMessageBox.Question):
     font.setFamily(c.getEditorFont())
     font.setPointSize(c.getEditorFontSize())
     msgBox.setFont(font)
-    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ffcc00;\n"
+    borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #ffcc00;\n"
     if icontype == "critical":
-        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #ff0000;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #ff0000;\n"
     if icontype == "information" or icon == "question":
-        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"border-top: 8px solid #00ccff;\n"
+        borderstyle ="QPushButton{"+f"font:{c.getEditorFontSize()}pt '{c.getEditorFont()}';"+"}\n"+"QMessageBox{border-top: 8px solid #00ccff;\n"
     msgBox.setStyleSheet(
         borderstyle + open(c.getHomeDir() + "qssfiles/qmessagebox.qss", "r").read())
     msgBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
