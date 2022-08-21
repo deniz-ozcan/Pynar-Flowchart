@@ -3,7 +3,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView as Web
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel, QLineEdit, QMessageBox
 from PyQt5.QtCore import Qt, QUrl, QSize, Qt, QRect, QTimer
 from PyQt5.QtGui import QPixmap, QIcon, QPageSize, QPageLayout, QMovie
-import icons
+import icons_rc
 from sys import exit, argv
 from os.path import dirname, join, abspath, exists
 from platform import system
