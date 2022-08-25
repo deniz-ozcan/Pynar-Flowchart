@@ -1,8 +1,10 @@
-from pyflowchart import Flowchart
+from flow import get_flowchart
 from PyQt5.QtWebEngineWidgets import QWebEngineView as Web
+from PyQt5.QtWebEngineWidgets import QWebEngineSettings as Settings
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QFrame, QHBoxLayout, QWidget, QAction, QMenuBar, QToolBar, QStatusBar, QMenu, QTabWidget, QLabel, QLineEdit, QMessageBox
-from PyQt5.QtCore import Qt, QUrl, QSize, Qt, QRect, QTimer
+from PyQt5.QtCore import Qt, QUrl, QSize, QRect, QTimer
 from PyQt5.QtGui import QPixmap, QIcon, QPageSize, QPageLayout, QMovie
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 import icons_rc
 from sys import exit, argv
 from os.path import dirname, join, abspath, exists
@@ -11,6 +13,8 @@ from os import environ, makedirs
 from subprocess import check_output
 from re import sub, finditer
 from autopep8 import fix_code
+import tempfile
+
 class LoadingMessageBox(QMessageBox):
 
     def __init__(self, parent=None):
@@ -35,7 +39,6 @@ class LoadingMessageBox(QMessageBox):
         self.setWindowFlags(self.windowFlags() |Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
         self.setStandardButtons(QMessageBox.NoButton)
 
-
 class FlowchartMaker(QMainWindow):
 
     pagewidth = 0
@@ -58,6 +61,7 @@ class FlowchartMaker(QMainWindow):
         self.magnifyminus = QAction(self, icon=QIcon(QPixmap(":/icons/icons/uzak.png")))
         self.defhome = QAction(self, icon=QIcon(QPixmap(":/icons/icons/defhome.png")))
         self.grabpage = QAction(self, icon=QIcon(QPixmap(":/icons/icons/grab.png")))
+        self.printpage = QAction(self, icon=QIcon(QPixmap(":/icons/icons/printicon.png")))
         self.openfile = QAction("Aç")
         self.exitact = QAction("Çıkış")
         self.tabWidget = QTabWidget(self.view)
@@ -84,6 +88,7 @@ class FlowchartMaker(QMainWindow):
         self.toolBar.addAction(self.magnifyminus)
         self.toolBar.addAction(self.defhome)
         self.toolBar.addAction(self.grabpage)
+        self.toolBar.addAction(self.printpage)
         self.toolBar.setStyleSheet("QToolBar{ background: #394b58;border:none;spacing:4px;}QToolButton{min-width:45px;min-height:45px;}QToolButton::hover {background: #6b899f; margin-left:2px;margin-bottom:2px;};QToolButton:pressed{background-color: transparent;}")
         self.toolBar.setMovable(False)
         self.filemenu.addAction(self.openfile)
@@ -91,8 +96,10 @@ class FlowchartMaker(QMainWindow):
         self.savebut.setToolTip("Kaydet.")
         self.defhome.setToolTip("Eski Haline getir.")
         self.grabpage.setToolTip("Sayfayı Sürükle.")
+        self.printpage.setToolTip("Sayfayı Önizle.")
         self.magnifyplus.setToolTip("Yakınlaştır.")
         self.magnifyminus.setToolTip("Uzaklaştır.")
+        self.printpage.setShortcut("Ctrl+P")
         self.magnifyplus.setShortcut("Ctrl++")
         self.savebut.setShortcut("Ctrl+S")
         self.magnifyminus.setShortcut("Ctrl+-")
@@ -107,7 +114,9 @@ class FlowchartMaker(QMainWindow):
         self.defhome.triggered.connect(lambda: self.htmlOpener("noGrab"))
         self.grabpage.triggered.connect(lambda: self.htmlOpener("grab"))
         self.openfile.triggered.connect(self.openFile)
+        self.printpage.triggered.connect(self.printpreviewDialog)
         self.defhome.setDisabled(True)
+        self.printpage.setDisabled(True)
         self.grabpage.setDisabled(True)
         self.magnifyminus.setDisabled(True)
         self.magnifyplus.setDisabled(True)
@@ -115,6 +124,7 @@ class FlowchartMaker(QMainWindow):
         self.mainWid.setStyleSheet("QTabWidget::pane { background: transparent;color: white;}QTabBar::tab{height: 0px;width: 0px;}QTabWidget::tab-bar:top {top: 0px;}QTabWidget::tab-bar:bottom {bottom: 0px;}QTabWidget::tab-bar:left {right: 0px;}QTabWidget::tab-bar:right {left: 0px;}QTabBar::tab:selected {color: white;background: #394b58;}QTabBar::tab:!selected {background: transparent;color: white;}QTabBar::tab:!selected:hover {background: #6b899f;color: black;}QTabBar::tab:top:last,QTabBar::tab:bottom:last,QTabBar::tab:top:only-one,QTabBar::tab:bottom:only-one {margin-right: 0;}QTabBar::tab:left:last,QTabBar::tab:right:last,QTabBar::tab:left:only-one,QTabBar::tab:right:only-one {margin-bottom: 0;}")
         self.chartStatus.setStyleSheet("QStatusBar{background-color: rgb(0,96,132);color:white;}")
         self.toolBar.setMinimumHeight(60)
+
     def openFile(self):
         self.file_path = QFileDialog.getOpenFileName(self, "Dosya Aç", "", "Python Dosyası (*.py)")[0]
         if self.file_path:
@@ -124,6 +134,7 @@ class FlowchartMaker(QMainWindow):
         if ok:
             self.browser.page().runJavaScript("document.getElementsByTagName('svg')[0]['clientWidth'];", self.ready1)
             self.browser.page().runJavaScript("document.getElementsByTagName('svg')[0]['clientHeight'];", self.ready2)
+            self.browser.page().runJavaScript("document.getElementsByTagName('svg')[0].outerHTML", self.callback_function)
 
     def ready1(self, width):
         if(FlowchartMaker.pagewidth == 0):
@@ -132,6 +143,27 @@ class FlowchartMaker(QMainWindow):
     def ready2(self, height):
         if(FlowchartMaker.pageheight == 0):
             FlowchartMaker.pageheight += height
+
+    def callback_function(self,html:str):
+        self.tempfilename = tempfile.mktemp(prefix='Flowchart',suffix=".pdf", dir=tempfile.gettempdir())
+        pagelay = QPageLayout()
+        if(FlowchartMaker.pagewidth > FlowchartMaker.pageheight):
+            pagelay.setOrientation(QPageLayout.Orientation.Landscape)
+        else:
+            pagelay.setOrientation(QPageLayout.Orientation.Portrait)
+        pagelay.setPageSize(QPageSize(QSize(FlowchartMaker.pagewidth, FlowchartMaker.pageheight), "A4"))
+        self.browser.page().printToPdf(self.tempfilename, pageLayout=pagelay)
+        jschange=open(join(dirname(__file__),'Pdfpreview/viewer.js'),encoding='utf-8').readlines()
+        use,tmp="'use strict';\n","var DEFAULT_URL = '"+self.tempfilename.replace("\\","/")+"';\n"
+        with open(join(dirname(__file__),'Pdfpreview/viewer.js'),'w',encoding='utf-8') as f:
+            for i in range(0,len(jschange)):
+                if(i==0):
+                    f.write(use)
+                elif(i==1):
+                    f.write(tmp)
+                else:
+                    f.write(jschange[i])
+        self.printpage.setEnabled(True)
 
     def htmlOpener(self, situation):
         FlowchartMaker.pagewidth = 0
@@ -150,11 +182,18 @@ class FlowchartMaker(QMainWindow):
         fc = self.conditionSearch(open(self.file_path, encoding="utf-8").read())
         if(situation == "grab"):
             self.browser = Web()
-            self.browser.setHtml(start+grabcss+grabjs +jsfile+middle+fc+end, baseUrl=QUrl("file://"))
+            try:
+                self.browser.setHtml(start+grabcss+grabjs +jsfile+middle+fc+end, baseUrl=QUrl("file://"))
+                self.chartStatus.showMessage("Akış Şeması Düzenlendi.", 3000)
+            except:
+                self.chartStatus.showMessage('Akış Şeması Oluşturulamadı!', 3000)
         if(situation == "noGrab"):
             self.browser = Web()
-            self.browser.setHtml(start+jsfile + middle +fc+end, baseUrl=QUrl("file://"))
-        self.chartStatus.showMessage("Akış Şeması Düzenlendi.", 3000)
+            try:
+                self.browser.setHtml(start+jsfile + middle +fc+end, baseUrl=QUrl("file://"))
+                self.chartStatus.showMessage("Akış Şeması Düzenlendi.", 3000)
+            except:
+                self.chartStatus.showMessage('Akış Şeması Oluşturulamadı!', 3000)
         self.horLay_3.addWidget(self.browser)
         self.tabWidget.addTab(self.tab, f"")
         self.browser.loadFinished.connect(self.onLoadFinished)
@@ -165,51 +204,9 @@ class FlowchartMaker(QMainWindow):
         self.savebut.setEnabled(True)
 
     def conditionSearch(self, code: str) -> str:
-        code=fix_code(code,options={'max_line_length': 200})
-        Q = ['€€€€'*(x-9) if x >= 10 else '    '*(x+1) for x in reversed(range(20))]
-        y, n, q, c0, c1, c2, tr, ex, w, f = '₺₺₺₺', '\n', "''\n", 'if', 'elif', 'else', 'try', 'except', 'while', 'for'
-        code = sub('#.*', '', code)
-        b1, b2, b3, b4, b5, b6 = [i.start() for i in finditer('{', code)], [i.start() for i in finditer('}', code)], [i.start() for i in finditer('\[', code)], [i.start() for i in finditer('\]', code)], [i.start() for i in finditer('\(', code)], [i.start() for i in finditer('\)', code)]
-        code = list(code)
-        prob=0
-        if len(b1) == len(b2) and b1 != 0 and b2 != 0:
-            for i in range(0, len(b2)):
-                for j in range(b1[i], b2[i]):
-                    if(code[j] == '\n' ):
-                        prob+=1
-                        code[j]=''
-                    if(code[j] == ' ' and prob > 0):
-                        code[j] = ''
-                prob=0
-        prob=0
-        if len(b3) == len(b4) and b3 != 0 and b4 != 0:
-            for i in range(0, len(b4)):
-                for j in range(b3[i], b4[i]):
-                    if(code[j] == '\n' ):
-                        prob+=1
-                        code[j]=''
-                    if(code[j] == ' ' and prob > 0):
-                        code[j] = ''
-                prob=0
-        prob=0
-        if len(b5) == len(b6) and b5 != 0 and b6 != 0:
-            for i in range(0, len(b6)):
-                for j in range(b5[i], b6[i]):
-                    if(code[j] == '\n' ):
-                        prob+=1
-                        code[j]=''
-                    if(code[j] == ' ' and prob > 0):
-                        code[j] = ''
-                prob=0
-        code = ''.join(code)
-        code = (n+code).replace(Q[19], Q[9]).replace(n, y).replace(y +w, n+q+w).replace(y+f, n+q+f).replace(y+c0, n+q+c0)            
-        for i in range(len(Q)-10):
-            if(code.count(Q[i]) > 0):
-                code = code.replace(y+Q[i], n+Q[i+10]+q+Q[i+10]).replace(Q[i+10]+q+Q[i+10]+c2, Q[i+10]+n+Q[i+10]+c2).replace(Q[i+10]+q+Q[i+10]+c1,Q[i+10]+n+Q[i+10]+c1).replace(Q[i+10]+q+Q[i+10]+tr, Q[i+10]+n+Q[i+10]+tr).replace(Q[i+10]+q+Q[i+10]+ex, Q[i+10]+n+Q[i+10]+ex)
-        code = code.replace(Q[9], Q[19]).replace(y, n)
         fc = ''
         try:
-            fc = Flowchart.from_code(code).flowchart().replace(' start ', ' Başla ').replace('end function return', 'Fonksiyon Sonu').replace(' end ', ' Son ').replace(' output: ', ' Çıktı: ').replace(' input: ', ' Girdi: ').replace("operation: ''", "operation: ㅤ")
+            fc = get_flowchart(code).replace(': start', ': Başla').replace(': end', ': Son').replace(': pass',': Geç')
             return fc
         except:
             self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
@@ -242,10 +239,74 @@ class FlowchartMaker(QMainWindow):
                 except Exception as e:
                     self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
             else:
-                self.chartStatus.showMessage(
-                    'Akış Şeması kayıt edilemedi !', 3000)
+                self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
         else:
             self.chartStatus.showMessage('Akış Şeması kayıt edilemedi !', 3000)
+
+    def printpreviewDialog(self):
+        self.preview=PdfPreview(self.browser.page())
+        self.preview.show()
+
+class PdfPreview(QWidget):
+    def __init__(self,pdfpage):
+        super(PdfPreview, self).__init__()
+        self.setWindowTitle("Akış Şeması Önizlemesi")
+        self.resize(1000, 500)        
+        self.setWindowIcon(QIcon(QPixmap(":/icons/icons/flowchart.png")))
+        self.horlay2 = QHBoxLayout(self)
+        self.horlay2.setSpacing(0)
+        self.horlay2.setObjectName(u"horlay2")
+        self.horlay2.setContentsMargins(0, 0, 0, 0)
+        self.webView = Web()
+        self.webView.settings().setAttribute(Settings.PluginsEnabled, True)
+        self.webView.settings().setAttribute(Settings.PdfViewerEnabled, True)
+        self.horlay2.addWidget(self.webView)
+        self.webView.setContextMenuPolicy(Qt.NoContextMenu)
+        self.webView.setUrl(QUrl.fromLocalFile(join(dirname(__file__), "./Pdfpreview/viewer.html")))
+        self.webView.page().printRequested.connect(self.printpage)
+        self.pdffile=pdfpage
+
+    def printpage(self): 
+        printer = QPrinter(QPrinter.HighResolution)
+        dialog = QPrintDialog(printer, self)
+        if dialog.exec_() == QPrintDialog.Accepted:
+            if(FlowchartMaker.pagewidth != 0 and FlowchartMaker.pageheight != 0):
+                dialog = QFileDialog(self)
+                dialog.setViewMode(QFileDialog.List)
+                plt = system()
+                if plt == "Windows":
+                    documents_dir = join(environ['USERPROFILE']+"/Documents/PynarKutu/")
+                elif plt == "Linux":
+                    documents_dir = check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip()+"/PynarKutu"
+                if not exists(documents_dir):
+                    makedirs(documents_dir)
+                filename = dialog.getSaveFileName(self, "Kaydet", documents_dir, "Flowchart Pdf (*.pdf)")
+                if filename[0]:
+                    fullpath = filename[0]
+                    pagelay = QPageLayout()
+                    if(FlowchartMaker.pagewidth > FlowchartMaker.pageheight):
+                        pagelay.setOrientation(QPageLayout.Orientation.Landscape)
+                    else:
+                        pagelay.setOrientation(QPageLayout.Orientation.Portrait)
+                    pagelay.setPageSize(QPageSize(QSize(FlowchartMaker.pagewidth, FlowchartMaker.pageheight), "A4"))
+                    if(not fullpath.endswith(".pdf")):
+                        fullpath += ".pdf"
+                    try:
+                        self.pdffile.printToPdf(abspath(fullpath), pageLayout=pagelay)
+                        msgBox=QMessageBox()
+                        msgBox.information(self,"Başarılı",fullpath+" kaydedildi.")
+                    except Exception as e:
+                        msgBox=QMessageBox()
+                        msgBox.warning(self,"Başarısız"," Akış Şeması kayıt edilemedi !")
+                else:
+                    msgBox=QMessageBox()
+                    msgBox.warning(self,"Başarısız"," Akış Şeması kayıt edilemedi !")
+            else:
+                msgBox=QMessageBox()
+                msgBox.warning(self,"Başarısız"," Akış Şeması kayıt edilemedi !")
+        else:
+            msgBox=QMessageBox()
+            msgBox.warning(self,"Başarısız"," Akış Şeması kayıt edilemedi !")
 
 
 if __name__ == "__main__":
