@@ -4,7 +4,7 @@
 
 Akış şeması algoritmaları ve işlemleri birbirine oklarla bağlı değişik tiplerdeki kutular içerisinde gösteren yaygın bir şema tipidir. Akış şemaları çeşitli alanlardaki işlem ve uygulamaların yönetilmesi, belgelendirilmesi, tasarlanması ve çözümlenmesinde kullanılır.
 
-![Pic1](https://user-images.githubusercontent.com/94781420/187765115-90e0bbaa-e617-411e-b23d-cd202e60bffe.png)
+![Pic1](https://user-images.githubusercontent.com/94781420/187765115-90e0bbaa-e617-411e-b23d-cd202e60bffe.png | width=100)
 
 ## 1.2 Program editörde nasıl kullanılır?
 
