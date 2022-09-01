@@ -4,7 +4,7 @@
 
 Akış şeması algoritmaları ve işlemleri birbirine oklarla bağlı değişik tiplerdeki kutular içerisinde gösteren yaygın bir şema tipidir. Akış şemaları çeşitli alanlardaki işlem ve uygulamaların yönetilmesi, belgelendirilmesi, tasarlanması ve çözümlenmesinde kullanılır.
 
-![Pic1](https://user-images.githubusercontent.com/94781420/187765115-90e0bbaa-e617-411e-b23d-cd202e60bffe.png | width=100)
+![Pic1](https://user-images.githubusercontent.com/94781420/187765115-90e0bbaa-e617-411e-b23d-cd202e60bffe.png)
 
 ## 1.2 Program editörde nasıl kullanılır?
 
@@ -14,7 +14,7 @@ Yazdığınız kodun akış şemasını oluşturmak için akış şeması butonu
 
 Akış şemasını kaydetmek için, akış şemasını oluşturduktan sonra, araç kutusundu bulunan kaydet butonuna tıklayınız. 
 
-![Pic3](https://user-images.githubusercontent.com/94781420/187765066-a860f626-0094-439f-991c-016a3c15d0d1.png | width=100)
+![Pic3](https://user-images.githubusercontent.com/94781420/187765066-a860f626-0094-439f-991c-016a3c15d0d1.png)
 
 Ekrana gelen pencerede kaydedilecek olan akış şemasının ismini giriniz. Ardından kaydedilecek yeri seçiniz ve kaydet butonuna basınız. Varsayılan olarak kaydedilecek yer,Documents ya da Belgelerim klasörü içinde bulunan PynarKutu klasörüdür.
 
