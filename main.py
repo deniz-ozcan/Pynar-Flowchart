@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication,QMainWindow,QFileDialog,QFrame,QHBoxLayout,QWidget,QAction,QMenuBar,QToolBar,QStatusBar,QMenu,QTabWidget,QLabel,QLineEdit,QMessageBox,QDialog
+from PyQt5.QtWidgets import QApplication,QMainWindow,QFileDialog,QFrame,QHBoxLayout,QWidget,QAction,QMenuBar,QToolBar,QStatusBar,QMenu,QTabWidget,QLabel,QLineEdit,QMessageBox,QDialog,QGridLayout,QRadioButton,QComboBox,QPushButton,QSizePolicy,QSpacerItem
 from PyQt5.QtGui import QPixmap, QIcon, QPageSize, QPageLayout, QMovie
 from PyQt5.QtWebEngineWidgets import QWebEngineSettings as Settings
 from PyQt5.QtWebEngineWidgets import QWebEngineView as Web
@@ -7,7 +7,7 @@ from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 from os.path import dirname, join, abspath, exists
 from subprocess import check_output
 from flow import get_flowchart
-from os import environ, makedirs
+from os import environ, makedirs,remove
 from platform import system
 from sys import exit, argv
 import tempfile
@@ -39,12 +39,77 @@ class LoadingMessageBox(QMessageBox):
         self.setStandardButtons(QMessageBox.NoButton)
 
 
+class GetPageSize(QDialog):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Sayfa Düzenlemesi")
+        self.setWindowIcon(QIcon(QPixmap(":/icons/icons/flowchart.png")))
+        self.resize(375, 292)
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
+        self.setMinimumSize(QSize(375, 0))
+        self.setMaximumSize(QSize(375, 16777215))
+        self.setStyleSheet("QDialog{background-color: #CAD7E0;}QPushButton {min-width:70px;width:70px; color: white;padding: 5px;font-size: 14px;margin: 4px 2px;border-radius: 4px; background-color: rgb(0, 170, 255);}QPushButton::hover{background-color:rgb(4, 124, 184)}")
+        self.glay1 = QGridLayout(self)
+        self.paperlab = QLabel(self)
+        self.frame = QFrame(self)
+        self.hlay = QHBoxLayout(self.frame)
+        self.okbut = QPushButton("Tamam",self.frame)
+        self.frame_2 = QFrame(self)
+        self.glay2 = QGridLayout(self.frame_2)
+        self.sizelab = QLabel("Kağıt Boyutu:",self.frame_2)
+        self.sizeBox = QComboBox(self.frame_2)
+        self.directlab = QLabel("Kağıt Yönü:",self.frame_2)
+        self.horrad = QRadioButton("Yatay",self.frame_2)
+        self.verrad = QRadioButton("Dikey",self.frame_2)
+        self.cancelbut = QPushButton("İptal",self.frame)
+        self.hlay.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        self.glay1.addItem(QSpacerItem(158, 20, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, 2, 1, 1)
+        self.glay1.addItem(QSpacerItem(20, 30, QSizePolicy.Minimum, QSizePolicy.Expanding), 0, 1, 1, 1)
+        self.glay1.addItem(QSpacerItem(158, 68, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, 0, 1, 1)
+        self.glay1.addItem(QSpacerItem(20, 31, QSizePolicy.Minimum, QSizePolicy.Expanding), 2, 1, 1, 1)
+        self.glay1.addWidget(self.paperlab, 1, 1, 1, 1)
+        self.glay1.addWidget(self.frame, 4, 1, 1, 2)
+        self.glay1.addWidget(self.frame_2, 3, 0, 1, 3)
+        self.glay2.addWidget(self.sizelab, 0, 0, 1, 1)
+        self.glay2.addWidget(self.sizeBox, 0, 1, 1, 2)
+        self.glay2.addWidget(self.directlab, 1, 0, 1, 1)
+        self.glay2.addWidget(self.horrad, 1, 1, 1, 1)
+        self.glay2.addWidget(self.verrad, 1, 2, 1, 1)
+        self.hlay.addWidget(self.okbut)
+        self.hlay.addWidget(self.cancelbut)
+        self.sizeBox.addItem("A0")
+        self.sizeBox.addItem("A1")
+        self.sizeBox.addItem("A2")
+        self.sizeBox.addItem("A3")
+        self.sizeBox.addItem("A4")
+        self.sizeBox.addItem("B0")
+        self.sizeBox.addItem("B1")
+        self.sizeBox.addItem("B2")
+        self.sizeBox.addItem("B3")
+        self.sizeBox.addItem("B4")
+        self.verrad.setChecked(True)
+        self.paperorientation()
+        self.verrad.clicked.connect(self.paperorientation)
+        self.horrad.clicked.connect(self.paperorientation)
+        self.okbut.clicked.connect(self.accept)
+        self.cancelbut.clicked.connect(self.reject)
+        
+    def paperorientation(self):
+        if(self.horrad.isChecked()):
+            self.paperlab.setPixmap(QPixmap(":/icons/icons/x.png"))
+        else:
+            self.paperlab.setPixmap(QPixmap(":/icons/icons/y.png"))
+
+
 class FlowchartMaker(QMainWindow):
 
     def __init__(self):
         super(FlowchartMaker, self).__init__()
         self.loading = LoadingMessageBox()
         self.file_path = ""
+        self.pagewidth = 0
+        self.pageheight = 0
         self.mainWid = QWidget(self)
         self.horLay = QHBoxLayout(self.mainWid)
         self.view = QFrame(self.mainWid)
@@ -146,11 +211,24 @@ class FlowchartMaker(QMainWindow):
             self.pageheight += height
 
     def ready3(self, html: str):
-        pass
         self.tempfilename = tempfile.mktemp(prefix="Flowchart", suffix=".pdf", dir=tempfile.gettempdir())
         pagelay = QPageLayout()
-        pagelay.setPageSize(QPageSize(QPageSize.PageSizeId.A4))
-        pagelay.setOrientation(QPageLayout.Orientation.Portrait)
+        self.papersize = GetPageSize()
+        if self.papersize.exec_() == QDialog.Accepted:
+            if self.papersize.verrad.isChecked():
+                pagelay.setOrientation(QPageLayout.Orientation.Portrait)
+                print("Portrait")
+            if self.papersize.horrad.isChecked():
+                pagelay.setOrientation(QPageLayout.Orientation.Landscape)
+                print("Landscape")
+            pagelay.setPageSize(QPageSize(QSize(self.pagewidth, self.pageheight), self.papersize.sizeBox.currentText()))
+            print(self.papersize.sizeBox.currentText())
+        else:
+            if self.pagewidth > self.pageheight:
+                pagelay.setOrientation(QPageLayout.Orientation.Landscape)
+            else:
+                pagelay.setOrientation(QPageLayout.Orientation.Portrait)
+            pagelay.setPageSize(QPageSize(QSize(self.pagewidth, self.pageheight), "A4"))
         self.browser.page().printToPdf(self.tempfilename, pageLayout=pagelay)
         jschange = open(join(dirname(__file__), "Pdfpreview/viewer.js"), encoding="utf-8").readlines()
         use, tmp = "'use strict';\n","var DEFAULT_URL = '" + self.tempfilename.replace("\\", "/") + "';\n"
@@ -222,8 +300,22 @@ class FlowchartMaker(QMainWindow):
             if filename[0]:
                 fullpath = filename[0]
                 pagelay = QPageLayout()
-                pagelay.setOrientation(QPageLayout.Orientation.Portrait)
-                pagelay.setPageSize(QPageSize(QPageSize.PageSizeId.A4))
+                self.papersize = GetPageSize()
+                if self.papersize.exec_() == QDialog.Accepted:
+                    if self.papersize.verrad.isChecked():
+                        pagelay.setOrientation(QPageLayout.Orientation.Portrait)
+                        print("Portrait")
+                    if self.papersize.horrad.isChecked():
+                        pagelay.setOrientation(QPageLayout.Orientation.Landscape)
+                        print("Landscape")
+                    pagelay.setPageSize(QPageSize(QSize(self.pagewidth, self.pageheight), self.papersize.sizeBox.currentText()))
+                    print(self.papersize.sizeBox.currentText())
+                else:
+                    if self.pagewidth > self.pageheight:
+                        pagelay.setOrientation(QPageLayout.Orientation.Landscape)
+                    else:
+                        pagelay.setOrientation(QPageLayout.Orientation.Portrait)
+                    pagelay.setPageSize(QPageSize(QSize(self.pagewidth, self.pageheight), "A4"))
                 if not fullpath.endswith(".pdf"):
                     fullpath += ".pdf"
                 try:
@@ -235,14 +327,23 @@ class FlowchartMaker(QMainWindow):
                 self.chartStatus.showMessage("Akış Şeması kayıt edilemedi !", 3000)
         else:
             self.chartStatus.showMessage("Akış Şeması kayıt edilemedi !", 3000)
+        self.papersize.deleteLater()
 
     def previewflow(self):
         self.preview = PdfPreview()
         self.preview.show()
+        self.preview.webView.page().printRequested.connect(self.printflow)
+
+    def printflow(self):
+        printer = QPrinter(QPrinter.HighResolution)
+        dialog = QPrintDialog(printer, self)
+        if dialog.exec_() == QPrintDialog.Accepted:
+            self.saveFile()
 
     def helpme(self):
         self.helpmepage = HelpDialog()
         self.helpmepage.show()
+
 
 class HelpDialog(QDialog):
     def __init__(self):
@@ -278,18 +379,9 @@ class PdfPreview(QDialog):
         self.horlay2.addWidget(self.webView)
         self.webView.setContextMenuPolicy(Qt.NoContextMenu)
         self.webView.setUrl(QUrl.fromLocalFile(join(dirname(__file__), "./Pdfpreview/viewer.html")))
-        self.webView.page().printRequested.connect(self.printflow)
-
-    def printflow(self):
-        printer = QPrinter(QPrinter.HighResolution)
-        dialog = QPrintDialog(printer, self)
-        if dialog.exec_() == QPrintDialog.Accepted:
-            FlowchartMaker().saveFile()
 
 if __name__ == "__main__":
     app = QApplication(argv)
     self = FlowchartMaker()
     self.show()
     exit(app.exec_())
-
-
