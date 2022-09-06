@@ -67,11 +67,6 @@
   ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
   <!-- PROJECT FILES DESCRIPTION -->
   <h2 id="project-files-description">📝: Project Files Description</h2>
- 
- 
- 
- 
-
 <ul>
     <li><b>main.py</b> - Where all the main classes.</li>
     <li><b>flowchart.js</b> - Where main js file for creating charts.</li>
@@ -85,9 +80,12 @@
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
   <!-- CREDITS -->
   <h2 id="Credits">:scroll: Credits</h2>
-  [![GitHubBadge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/deniz-ozcan)[![LinkedInBadge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/98-deniz-ozcan)
-  <h3>Important<h3>
+    <h3>Important<h3>
    <p>
    The codes in this repo were developed with the support of TÜBİTAK (Scientific and Technological Research Council of Turkey) within the scope of the project numbered 118E882, “Turkish Python Code Editor Able to Analyze Users' Errors and Make Interactive Routing with Dialogue-Based Intelligent Factors ”. It cannot be used commercially. 
    </p>
+   
+  [![GitHubBadge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/deniz-ozcan)
+  [![LinkedInBadge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/98-deniz-ozcan)
+
 
