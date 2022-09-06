@@ -1,0 +1,2 @@
+PyQt5-Qt5>=5.15.0 
+py2flowchart>=0.0.2
