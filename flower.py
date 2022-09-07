@@ -289,7 +289,7 @@ class LoadingMessageBox(QMessageBox):
         movie.start()
         movie.setSpeed(250)
         movie.setPaused(False)
-        self.setStyleSheet("QLineEdit{font-size: 12pt;border:none; background-color:transparent}QMessageBox{opacity: 0;border: 10px solid #00ff88;background-color: #ffff88;border-radius:10px;}QLabel{margin: 10px 10px;font-size: 12pt;height: 110px; min-height: 110px; max-height: 110px; width: 255px; min-width: 255px; max-width: 255px;}QPushButton{background-color: #00aaff;color: white;font-size: 12pt;padding: 5px 18px 5px 18px;text-align: center;text-decoration: none;display: inline-block;margin: 4px 2px;border-radius: 7px;}QPushButton:hover {background: #58c1e7;}")
+        self.setStyleSheet("QLineEdit{border:none; background-color:transparent}QMessageBox{opacity: 0;border: 10px solid #00ff88;background-color: #ffff88;border-radius:10px;}QLabel{margin: 10px 10px;font-size: 12pt;height: 110px; min-height: 110px; max-height: 110px; width: 255px; min-width: 255px; max-width: 255px;}QPushButton{background-color: #00aaff;color: white;font-size: 12pt;padding: 5px 18px 5px 18px;text-align: center;text-decoration: none;display: inline-block;margin: 4px 2px;border-radius: 7px;}QPushButton:hover {background: #58c1e7;}")
         self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.WindowSystemMenuHint)
         self.setStandardButtons(QMessageBox.NoButton)
 
