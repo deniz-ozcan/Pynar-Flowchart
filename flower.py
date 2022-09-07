@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow,QFileDialog,QFrame,QHBoxLayout,QWidget,QAction,QMenuBar,QToolBar,QStatusBar,QTabWidget,QLabel,QLineEdit,QMessageBox,QDialog,QGridLayout,QRadioButton,QComboBox,QPushButton,QSizePolicy,QSpacerItem
+from PyQt5.QtWidgets import QMainWindow,QFileDialog,QFrame,QHBoxLayout,QWidget,QAction,QToolBar,QStatusBar,QTabWidget,QLabel,QLineEdit,QMessageBox,QDialog,QGridLayout,QRadioButton,QComboBox,QPushButton,QSizePolicy,QSpacerItem
 from PyQt5.QtGui import QPixmap, QIcon, QPageSize, QPageLayout, QMovie
 from PyQt5.QtWebEngineWidgets import QWebEngineSettings as Settings
 from PyQt5.QtWebEngineWidgets import QWebEngineView as Web
@@ -6,12 +6,11 @@ from PyQt5.QtCore import Qt, QUrl, QSize, QRect, QTimer
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 from os.path import dirname, join, abspath, exists
 from subprocess import check_output
-from os import environ, makedirs,remove
+from os import environ, makedirs
 from platform import system
 import tempfile
 import ast
 import inspect
-import json
 
 CONDITION = "condition"
 OPERATION = "operation"
@@ -21,8 +20,6 @@ SUBROUTINE = "subroutine"
 START = "start"
 END = "end"
 fnode_id = 0
-
-
 
 class CodeflowVisitor(ast.NodeVisitor):
 
@@ -270,8 +267,6 @@ def get_flowchart(fn, with_explain=False):
     else:
         source = inspect.getsource(fn)
     return CodeflowVisitor(source).dovisit(with_explain)
-
-
 
 
 class LoadingMessageBox(QMessageBox):
@@ -617,11 +612,3 @@ class PdfPreview(QWidget):
         self.horlay2.addWidget(self.webView)
         self.webView.setContextMenuPolicy(Qt.NoContextMenu)
         self.webView.setUrl(QUrl.fromLocalFile(join(dirname(__file__), "./Pdfpreview/viewer.html")))
-# from PyQt5.QtWidgets import QApplication
-# from sys import argv
-# source=''
-# if __name__ == "__main__":
-#     app = QApplication(argv)
-#     self = FlowchartMaker(source)
-#     self.show()
-#     exit(app.exec_())
