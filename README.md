@@ -57,7 +57,7 @@
          <li> Click the right button while pressing the Shift key.</li>
          <li> You can see "Open powershell window here" .</li>
          <li> pip install -r requirements.txt </li>
-         <li> pyinstaller --onefile -w -i .\Flowchart.png .\palette.py</li>
+         <li> pyinstaller --onefile -w -i .\Flowchart.png .\main.py</li>
          <li> Run these lines of code with Shell in this order..</li>
          <li> You can see that executable file in dist folder in that folder</li>
       </ul>
